@@ -33,3 +33,7 @@ Mapping tables (statuses, version statuses, note labels, task types) live at the
 
     npm test                      # vitest (domain rules, planners, components)
     python3 -m unittest scripts/test_import_mapping.py
+
+## Bundle size (next build, 2026-10-18)
+
+18 client JS chunks, 730 KB raw, **220 KB gzipped in total** — so every route's client JS is well under the 300 KB gate (largest chunk 69 KB gz). No third-party UI libraries.
