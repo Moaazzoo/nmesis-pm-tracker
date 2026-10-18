@@ -3,6 +3,11 @@ import { signIn } from "./actions";
 const MESSAGES: Record<string, string> = {
   invalid: "That username and password don't match.",
   missing: "Enter your username and password.",
+  config: "The app cannot reach the login service: its Supabase key was rejected. Check the NEXT_PUBLIC_SUPABASE_ANON_KEY setting on Vercel.",
+  disabled: "Email sign-in is switched off in Supabase (Authentication → Providers → Email).",
+  unconfirmed: "This login exists but its email is not confirmed yet. An admin can confirm it in Supabase.",
+  rate: "Too many attempts. Wait a minute and try again.",
+  other: "Could not sign in. The login service returned an unexpected error.",
 };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
