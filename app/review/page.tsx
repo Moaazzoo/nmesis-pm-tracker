@@ -41,7 +41,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
         {!canDecide && <p className="mb-4 text-[12px] text-faint">Your role can see the queue but not decide; supervisors and production approve or send back.</p>}
         {items.length === 0
           ? <Empty title="Nothing waiting for review" hint="Tasks appear here the moment an artist submits a version (status Pending Review)." />
-          : <div className="grid gap-3">{items.map((it) => canDecide ? <ReviewItemCard key={it.id} item={it} now={Date.now()} /> : <ReviewItemCard key={it.id} item={{ ...it }} now={Date.now()} />)}</div>}
+          : <div className="grid gap-3">{items.map((it) => <ReviewItemCard key={it.id} item={it} now={Date.now()} canDecide={canDecide} />)}</div>}
       </Page>
       {sp.task && <TaskDrawer taskId={sp.task} person={person} base={base} tab={sp.tab} />}
     </>

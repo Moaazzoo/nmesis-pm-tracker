@@ -7,13 +7,16 @@ import { QueueList } from "@/components/queue/queue-list";
 import { TaskDrawer } from "@/components/tasks/task-drawer";
 import { requirePerson } from "@/lib/auth";
 import { loadQueue } from "@/lib/queries/queue";
+import { groupQueue } from "@/lib/queries/queue-shape";
+import { isViewerId } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function MyQueue({ searchParams }: { searchParams: Promise<{ task?: string; tab?: string }> }) {
   const person = await requirePerson();
   const sp = await searchParams;
-  const { groups, total } = await loadQueue(person.id);
+  const queueFor = person.lens_person_id ?? person.id;
+  const { groups, total } = isViewerId(queueFor) ? { groups: groupQueue([]), total: 0 } : await loadQueue(queueFor);
   return (
     <>
       <TopBar crumb={[{ label: "My Queue" }]} right={<UserMenu person={person} />} />

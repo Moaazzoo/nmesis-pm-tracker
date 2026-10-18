@@ -9,7 +9,7 @@ import type { ReviewItem as Item } from "@/lib/queries/review";
 function fmt(ts: string) { return new Date(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
 function daysAgo(ts: string, now: number) { return Math.max(0, Math.floor((now - Date.parse(ts)) / 86_400_000)); }
 
-export function ReviewItemCard({ item, now }: { item: Item; now: number }) {
+export function ReviewItemCard({ item, now, canDecide = true }: { item: Item; now: number; canDecide?: boolean }) {
   const [mode, setMode] = useState<"idle" | "approve" | "sendback" | "done">("idle");
   const [nextReady, setNextReady] = useState(true); const [body, setBody] = useState("");
   const [result, setResult] = useState<string | null>(null); const [error, setError] = useState<string | null>(null); const [pending, start] = useTransition();
@@ -43,7 +43,8 @@ export function ReviewItemCard({ item, now }: { item: Item; now: number }) {
       {(item.artist_note || item.version?.note) && (
         <p className="mt-3 rounded-[10px] bg-[rgba(255,255,255,.03)] px-3 py-2 text-[12px] text-ink"><span className="text-faint">Artist: </span>{item.version?.note ?? item.artist_note?.body}</p>
       )}
-      {mode === "idle" && (
+      {mode === "idle" && !canDecide && <div className="mt-3 text-right"><Link href={`/review?task=${item.id}&tab=notes`} className="text-[12px] text-muted hover:text-ink">Open task</Link></div>}
+      {mode === "idle" && canDecide && (
         <div className="mt-3 flex items-center gap-2">
           <button type="button" onClick={() => setMode("approve")} className="rounded-full bg-green px-4 py-1.5 font-label text-[9px] font-bold text-[#0a0c0a]">Approve</button>
           <button type="button" onClick={() => setMode("sendback")} className="rounded-full border border-[rgba(255,90,95,.55)] px-4 py-1.5 font-label text-[9px] font-bold text-red hover:bg-[rgba(255,90,95,.08)]">Send back with comments</button>

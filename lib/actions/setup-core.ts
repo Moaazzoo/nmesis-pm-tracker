@@ -35,6 +35,13 @@ export async function applyCreateTasks(repo: SetupRepo, actor: Person, input: { 
   return { ok: true, data: { ids } };
 }
 
+/** A node and everything under it (groups and units), for cascading archive. */
+export function descendantIds(nodes: { id: string; parent_id: string | null }[], rootId: string): string[] {
+  const out = [rootId]; const queue = [rootId];
+  while (queue.length) { const p = queue.shift()!; for (const n of nodes) if (n.parent_id === p && !out.includes(n.id)) { out.push(n.id); queue.push(n.id); } }
+  return out;
+}
+
 export async function applyArchive(repo: SetupRepo, actor: Person, input: { kind: "task" | "node" | "milestone" | "project"; id: string }): Promise<ActionResult> {
   if (!can(actor, "edit_structure")) return { ok: false, error: "Only production can archive." };
   await repo.archive(input.kind, input.id);

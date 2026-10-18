@@ -4,7 +4,7 @@ import { submitVersion } from "@/lib/actions/drawer";
 import { Chip } from "@/components/ui/chip";
 import type { Version } from "@/lib/queries/task";
 
-const V_TONE: Record<string, "green" | "amber" | "red" | "neutral" | "muted"> = { submitted: "amber", approved: "green", client_approved: "green", needs_changes: "red" };
+const V_TONE: Record<string, "green" | "amber" | "red" | "neutral" | "muted"> = { submitted: "neutral", approved: "green", client_approved: "green", needs_changes: "muted" };
 const V_LABEL: Record<string, string> = { submitted: "Submitted", approved: "Approved", client_approved: "Client approved", needs_changes: "Needs changes" };
 function fmt(ts: string) { return new Date(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
 

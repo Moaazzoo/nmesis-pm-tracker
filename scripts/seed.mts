@@ -2,7 +2,7 @@
 // Run: npx tsx scripts/seed.mts data/seed/<code>.json [--versions-only]
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync } from "node:fs";
-import { planUpserts, type SeedFile } from "./seed-plan";
+import { planUpserts, upsertOptions, type SeedFile } from "./seed-plan";
 
 for (const line of readFileSync(".env.local", "utf8").split("\n")) {
   const m = line.match(/^([A-Z_]+)=(.*)$/);
@@ -49,37 +49,45 @@ if (plan.types.length) {
 }
 const pid = (u: string | null | undefined) => (u ? existing.peopleByUsername.get(u) ?? null : null);
 
-// project
-const proj = must(await db.from("tk_projects").upsert({ ftrack_id: plan.project.ftrack_id, code: plan.project.code, name: plan.project.name ?? plan.project.code,
-  client: plan.project.client ?? null, start_date: plan.project.start_date ?? null, end_date: plan.project.end_date ?? null, color: plan.project.color ?? null },
-  { onConflict: "ftrack_id" }).select("id").single() as unknown as { data: { id: string } | null; error: { message: string } | null }, "project");
+// project: created once; afterwards the tracker owns its fields
+const existingProject = must(await db.from("tk_projects").select("id").eq("ftrack_id", plan.project.ftrack_id).maybeSingle() as unknown as { data: { id: string } | null; error: { message: string } | null }, "project lookup") as { id: string } | null;
+if (!existingProject && versionsOnly) { console.error("pull-versions needs the project to be imported first"); process.exit(1); }
+const proj = existingProject ?? must(await db.from("tk_projects").insert({ ftrack_id: plan.project.ftrack_id, code: plan.project.code, name: plan.project.name ?? plan.project.code,
+  client: plan.project.client ?? null, start_date: plan.project.start_date ?? null, end_date: plan.project.end_date ?? null, color: plan.project.color ?? null }).select("id").single() as unknown as { data: { id: string } | null; error: { message: string } | null }, "project");
 const projectId = proj.id;
+const OPTS = upsertOptions(versionsOnly ? "versions" : "full");
 
 const nodeId = new Map<string, string>();
+const newTasks = new Set<string>();
 const taskId = new Map<string, string>();
 const versionId = new Map<string, string>();
 
 if (!versionsOnly) {
+  const known = must(await db.from("tk_nodes").select("id, ftrack_id").eq("project_id", projectId), "nodes lookup");
+  known.forEach((r) => nodeId.set(r.ftrack_id as string, r.id as string));
   for (const n of plan.nodes) {
-    const row = must(await db.from("tk_nodes").upsert({ project_id: projectId, parent_id: n.parent_ftrack_id ? nodeId.get(n.parent_ftrack_id) ?? null : null,
+    if (nodeId.has(n.ftrack_id)) continue;
+    const row = must(await db.from("tk_nodes").insert({ project_id: projectId, parent_id: n.parent_ftrack_id ? nodeId.get(n.parent_ftrack_id) ?? null : null,
       ftrack_id: n.ftrack_id, kind: n.kind, unit_kind: n.unit_kind, name: n.name, sort: n.sort, is_deliverable: n.is_deliverable,
-      content_type: n.content_type, delivered_date: n.delivered_date }, { onConflict: "ftrack_id" }).select("id").single() as unknown as { data: { id: string } | null; error: { message: string } | null }, `node ${n.name}`);
+      content_type: n.content_type, delivered_date: n.delivered_date }).select("id").single() as unknown as { data: { id: string } | null; error: { message: string } | null }, `node ${n.name}`);
     nodeId.set(n.ftrack_id, row.id);
   }
   await chunked(plan.tasks, async (c) => {
     const rows = must(await db.from("tk_tasks").upsert(c.map((t) => ({ project_id: projectId, node_id: nodeId.get(t.node_ftrack_id), ftrack_id: t.ftrack_id,
       name: t.name, pass_no: t.pass_no, type_id: t.type_id ?? (t.type_name ? existing.typeIdsByName.get(t.type_name) ?? null : null),
       status_key: t.status_key, start_date: t.start_date, due_date: t.due_date, critical: t.critical, description: t.description })),
-      { onConflict: "ftrack_id" }).select("id, ftrack_id"), "tasks");
-    rows.forEach((r) => taskId.set(r.ftrack_id as string, r.id as string));
+      OPTS).select("id, ftrack_id"), "tasks");
+    rows.forEach((r) => { taskId.set(r.ftrack_id as string, r.id as string); newTasks.add(r.ftrack_id as string); });
   });
+  const allTasks = must(await db.from("tk_tasks").select("id, ftrack_id").eq("project_id", projectId).range(0, 4999), "tasks lookup");
+  allTasks.forEach((r) => taskId.set(r.ftrack_id as string, r.id as string));
   await chunked(plan.assignments, async (c) => {
     ok(await db.from("tk_assignments").upsert(c.map((a) => ({ task_id: taskId.get(a.task_ftrack_id), person_id: pid(a.person_ftrack_username) }))
       .filter((a) => a.task_id && a.person_id), { onConflict: "task_id,person_id", ignoreDuplicates: true }), "assignments");
   });
   await chunked(plan.milestones, async (c) => {
     ok(await db.from("tk_milestones").upsert(c.map((m) => ({ project_id: projectId, ftrack_id: m.ftrack_id, name: m.name, kind: m.kind, due_date: m.due_date, done: m.done })),
-      { onConflict: "ftrack_id" }), "milestones");
+      OPTS), "milestones");
   });
 } else {
   const rows = must(await db.from("tk_tasks").select("id, ftrack_id").eq("project_id", projectId), "tasks lookup");
@@ -89,15 +97,17 @@ if (!versionsOnly) {
 await chunked(plan.versions, async (c) => {
   const rows = must(await db.from("tk_versions").upsert(c.filter((v) => taskId.has(v.task_ftrack_id)).map((v) => ({ task_id: taskId.get(v.task_ftrack_id), ftrack_id: v.ftrack_id,
     number: v.number, asset_name: v.asset_name ?? null, submitted_by: pid(v.submitted_by_username), submitted_at: v.submitted_at ?? new Date().toISOString(), link: v.link, status: v.status, note: v.note, source: "ftrack" })),
-    { onConflict: "ftrack_id" }).select("id, ftrack_id"), "versions");
+    OPTS).select("id, ftrack_id"), "versions");
   rows.forEach((r) => versionId.set(r.ftrack_id as string, r.id as string));
 });
+const allVersions = must(await db.from("tk_versions").select("id, ftrack_id").in("task_id", [...taskId.values()]).range(0, 9999), "versions lookup");
+allVersions.forEach((r) => { if (r.ftrack_id) versionId.set(r.ftrack_id as string, r.id as string); });
 
 if (!versionsOnly) {
   await chunked(plan.status_log, async (c) => {
     ok(await db.from("tk_status_log").upsert(c.filter((s) => taskId.has(s.task_ftrack_id)).map((s) => ({ task_id: taskId.get(s.task_ftrack_id), ftrack_id: s.ftrack_id,
       from_status_key: s.from_status_key, to_status_key: s.to_status_key, by_person_id: pid(s.by_username), at: s.at ?? new Date().toISOString() })),
-      { onConflict: "ftrack_id" }), "status_log");
+      OPTS), "status_log");
   });
   // notes: two passes so replies can reference their parent
   const noteId = new Map<string, string>();
@@ -105,16 +115,23 @@ if (!versionsOnly) {
     ftrack_id: n.ftrack_id, author_id: pid(n.author_username), category: n.category, source_label: n.source_label, body: n.body || "(empty note)",
     reply_to_id: n.reply_to_ftrack_id ? noteId.get(n.reply_to_ftrack_id) ?? null : null, created_at: n.at ?? new Date().toISOString() });
   const valid = plan.notes.filter((n) => taskId.has(n.task_ftrack_id));
+  const newNoteIds = new Set<string>();
+  const existingNoteIds = new Set<string>();
   await chunked(valid, async (c) => {
-    const rows = must(await db.from("tk_notes").upsert(c.map(noteRow), { onConflict: "ftrack_id" }).select("id, ftrack_id"), "notes");
-    rows.forEach((r) => noteId.set(r.ftrack_id as string, r.id as string));
+    const rows = must(await db.from("tk_notes").upsert(c.map(noteRow), OPTS).select("id, ftrack_id"), "notes");
+    rows.forEach((r) => { noteId.set(r.ftrack_id as string, r.id as string); newNoteIds.add(r.id as string); });
+  });
+  await chunked(valid, async (c) => {
+    const known = must(await db.from("tk_notes").select("id, ftrack_id").in("ftrack_id", c.map((n) => n.ftrack_id)), "notes lookup");
+    known.forEach((r) => noteId.set(r.ftrack_id as string, r.id as string));
   });
   const replies = valid.filter((n) => n.reply_to_ftrack_id && noteId.has(n.reply_to_ftrack_id));
-  await chunked(replies, async (c) => { ok(await db.from("tk_notes").upsert(c.map(noteRow), { onConflict: "ftrack_id" }), "note replies"); });
+  // replies: link newly inserted notes to their parent (rows that already existed are left alone)
+  for (const n of replies) { const id = noteId.get(n.ftrack_id); const parent = noteId.get(n.reply_to_ftrack_id!); if (id && parent && newNoteIds.has(id)) ok(await db.from("tk_notes").update({ reply_to_id: parent }).eq("id", id), "note reply"); }
   // task.status_since from the latest status change
   const latest = new Map<string, string>();
   for (const s of plan.status_log) if (s.at && (!latest.has(s.task_ftrack_id) || s.at > latest.get(s.task_ftrack_id)!)) latest.set(s.task_ftrack_id, s.at);
-  for (const [fid, at] of latest) { const id = taskId.get(fid); if (id) await db.from("tk_tasks").update({ status_since: at }).eq("id", id); }
+  for (const [fid, at] of latest) { const id = taskId.get(fid); if (id && newTasks.has(fid)) await db.from("tk_tasks").update({ status_since: at }).eq("id", id); }
 }
 
 console.log(`seeded ${plan.project.code}: nodes ${plan.nodes.length}, tasks ${plan.tasks.length}, assignments ${plan.assignments.length}, versions ${plan.versions.length}, notes ${plan.notes.length}, status_log ${plan.status_log.length}, milestones ${plan.milestones.length}`);

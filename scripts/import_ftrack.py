@@ -37,6 +37,11 @@ LABELS = {  # ftrack note label → tracker category
     "Department Sup Feedback": "Supervisor Feedback",
     "Art Director Feedback": "Supervisor Feedback",
     "Client Feedback": "Client Feedback",
+    "Production Note": "Production Note",
+    "Production Feedback": "Production Note",
+    "Round Note": "Production Note",
+    "Missing Assets": "Production Note",
+    "General Note": "Production Note",
 }
 TRACKER_TYPES = ["Layout", "Modeling", "Shading", "Animation", "FX", "Lighting", "Compositing", "Editing",
                  "Storyboard", "Matchmove", "Art Direction",
@@ -254,9 +259,15 @@ def import_project(pid, versions_only=False):
     for chunk in _chunks(sorted(task_ids)):
         ids = ", ".join(f'"{i}"' for i in chunk)
         for s in query(f'select id, parent_id, date, from_status_id, status_id, user_id from TypedContextStatusChange where parent_id in ({ids})'):
+            to_name = statuses.get(s["status_id"]); from_name = statuses.get(s.get("from_status_id"))
+            to_key = map_status(to_name)
+            if to_key is None:
+                unmapped["statuses"][to_name or s["status_id"]] += 1
+            if from_name is not None and map_status(from_name) is None:
+                unmapped["statuses"][from_name] += 1
             status_log.append({"ftrack_id": s["id"], "task_ftrack_id": s["parent_id"],
-                               "from_status_key": map_status(statuses.get(s.get("from_status_id"))),
-                               "to_status_key": map_status(statuses.get(s["status_id"])) or "waiting",
+                               "from_status_key": map_status(from_name),
+                               "to_status_key": to_key or "waiting",
                                "by_username": users.get(s.get("user_id")), "at": _d(s.get("date"))})
 
     # notes (on tasks and on versions; notes on folders/units are counted, not imported)
@@ -270,7 +281,10 @@ def import_project(pid, versions_only=False):
         else:
             skipped_notes += 1
             continue
-        category, source_label = map_label(labels.get(n.get("category_id")))
+        raw_label = labels.get(n.get("category_id"))
+        category, source_label = map_label(raw_label)
+        if raw_label is not None and raw_label.strip() not in LABELS:
+            unmapped["labels"][raw_label.strip()] += 1  # reported, non-fatal: these fall into Production Note by design
         notes.append({"ftrack_id": n["id"], "task_ftrack_id": task_fid, "version_ftrack_id": version_fid,
                       "author_username": users.get(n.get("user_id")), "category": category, "source_label": source_label,
                       "body": (n.get("content") or "").strip(), "reply_to_ftrack_id": n.get("in_reply_to_id"), "at": _d(n.get("date"))})
@@ -300,7 +314,9 @@ def main(argv):
     counts = {k: len(v) for k, v in data.items() if isinstance(v, list)}
     print(f"wrote {out}: {counts}")
     if data.get("report"): print("report:", data["report"])
-    bad = {k: v for k, v in data["unmapped"].items() if v}
+    bad = {k: v for k, v in data["unmapped"].items() if v and k != "labels"}
+    if data["unmapped"].get("labels"):
+        print("note labels folded into Production Note (keep or add to LABELS):", data["unmapped"]["labels"])
     if bad:
         print("UNMAPPED values (add them to the tables in scripts/import_ftrack.py):")
         for k, v in bad.items(): print(f"  {k}: {v}")

@@ -16,6 +16,7 @@ export async function proxy(request: NextRequest) {
   });
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
+  if (user && pathname === "/no-access") return response;
   if (!user && pathname !== "/login") {
     const url = request.nextUrl.clone(); url.pathname = "/login"; url.search = "";
     return NextResponse.redirect(url);

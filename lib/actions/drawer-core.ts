@@ -9,7 +9,9 @@ export interface DrawerRepo {
   insertNote(n: { taskId: string; versionId?: string | null; authorId: string; category: NoteCategory; body: string; replyTo?: string | null }): Promise<string>;
   maxVersionNumber(taskId: string): Promise<number>;
   insertVersion(v: { taskId: string; number: number; submittedBy: string; link: string; note: string | null }): Promise<string>;
-  updateStatus(id: string, to: StatusKey, at: Date): Promise<void>;
+  updateStatus(id: string, to: StatusKey, at: Date, from?: string): Promise<boolean>;
+  versionTask(versionId: string): Promise<string | null>;
+  noteTask(noteId: string): Promise<string | null>;
   insertStatusLog(r: { taskId: string; from: string; to: StatusKey; by: string; at: Date }): Promise<void>;
   insertActivity(a: { projectId: string; taskId: string; actorId: string; action: string; payload: Record<string, unknown>; notify: string[] }): Promise<void>;
   listSupervisors(discipline: Discipline | null): Promise<string[]>;
@@ -22,6 +24,9 @@ export async function applyAddNote(repo: DrawerRepo, actor: Person, input: { tas
   if (!body) return { ok: false, error: "Write something first." };
   const task = await repo.getTask(input.taskId);
   if (!task) return { ok: false, error: "Task not found." };
+  if (actor.role === "artist" && !actor.is_admin && !task.assignees.includes(actor.id)) return { ok: false, error: "You can only write notes on tasks assigned to you." };
+  if (input.versionId && (await repo.versionTask(input.versionId)) !== task.id) return { ok: false, error: "That version belongs to another task." };
+  if (input.replyTo && (await repo.noteTask(input.replyTo)) !== task.id) return { ok: false, error: "That note belongs to another task." };
   const id = await repo.insertNote({ taskId: task.id, versionId: input.versionId ?? null, authorId: actor.id, category: input.category, body, replyTo: input.replyTo ?? null });
   await repo.insertActivity({ projectId: task.project_id, taskId: task.id, actorId: actor.id, action: "note", payload: { category: input.category, noteId: id }, notify: task.assignees.filter((p) => p !== actor.id) });
   return { ok: true, data: { id } };
@@ -42,7 +47,8 @@ export async function applySubmitVersion(repo: DrawerRepo, actor: Person, input:
   let status_key = task.status_key as StatusKey;
   if (task.status_key !== "pending_review") {
     status_key = "pending_review";
-    await repo.updateStatus(task.id, status_key, at);
+    const applied = await repo.updateStatus(task.id, status_key, at, task.status_key);
+    if (!applied) return { ok: false, error: "This task was changed by someone else a moment ago — refresh and look again." };
     await repo.insertStatusLog({ taskId: task.id, from: task.status_key, to: status_key, by: actor.id, at });
   }
   const discipline = await repo.taskDiscipline(task.id);
@@ -68,7 +74,12 @@ export function mergeHistory(
   activity: { id: string; at: string; action: string; actor: string | null; payload: Record<string, unknown> }[],
 ): HistoryItem[] {
   const name = (k: string | null) => (k && STATUS_BY_KEY[k as StatusKey]?.name) || (k ?? "—");
-  const a: HistoryItem[] = statusLog.map((s) => ({ id: s.id, at: s.at, who: s.by ?? "Someone", text: `${name(s.from_status_key)} → ${name(s.to_status_key)}`, kind: "status" }));
+  const reasons = new Map<string, string>();
+  for (const x of activity) if (x.action === "status" && typeof x.payload.note === "string") reasons.set(`${String(x.payload.from)}->${String(x.payload.to)}@${x.at.slice(0, 16)}`, x.payload.note);
+  const a: HistoryItem[] = statusLog.map((s) => {
+    const reason = reasons.get(`${s.from_status_key}->${s.to_status_key}@${s.at.slice(0, 16)}`);
+    return { id: s.id, at: s.at, who: s.by ?? "Someone", text: `${name(s.from_status_key)} → ${name(s.to_status_key)}${reason ? ` — "${reason}"` : ""}`, kind: "status" };
+  });
   const b: HistoryItem[] = activity.filter((x) => x.action !== "status").map((x) => ({ id: x.id, at: x.at, who: x.actor ?? "Someone", text: (ACTION_TEXT[x.action] ?? (() => x.action))(x.payload), kind: "activity" }));
   return [...a, ...b].sort((x, y) => y.at.localeCompare(x.at));
 }

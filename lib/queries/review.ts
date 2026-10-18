@@ -1,4 +1,5 @@
 import "server-only";
+import { must } from "./db";
 import { adminClient } from "@/lib/supabase/admin";
 import { risk } from "@/lib/risk";
 import { nextPass } from "@/lib/passes";
@@ -12,19 +13,19 @@ export type ReviewItem = TaskRow & { project_id: string; project_name: string; p
 export async function loadReview(discipline: Discipline | "all", now = new Date()): Promise<ReviewItem[]> {
   const db = adminClient();
   const one = <T,>(x: T | T[] | null | undefined): T | null => (Array.isArray(x) ? x[0] ?? null : x ?? null);
-  const { data: tasks } = await db.from("tk_tasks")
+  const tasks = must(await db.from("tk_tasks")
     .select("id, project_id, node_id, name, type_id, status_key, due_date, status_since, critical, type:tk_task_types(name), project:tk_projects!inner(id, name, status)")
-    .eq("status_key", "pending_review").eq("archived", false).eq("project.status", "active");
+    .eq("status_key", "pending_review").eq("archived", false).eq("project.status", "active"), "review.tasks");
   if (!tasks || tasks.length === 0) return [];
   const ids = tasks.map((t) => t.id);
   const nodeIds = [...new Set(tasks.map((t) => t.node_id))];
   const projectIds = [...new Set(tasks.map((t) => t.project_id))];
-  const [{ data: nodes }, { data: versions }, { data: notes }, { data: assigns }, { data: siblings }] = await Promise.all([
-    db.from("tk_nodes").select("id, parent_id, name, project_id").in("project_id", projectIds),
-    db.from("tk_versions").select("id, task_id, number, link, note, submitted_at, by:tk_people(full_name)").in("task_id", ids).order("submitted_at", { ascending: false }),
-    db.from("tk_notes").select("task_id, body, created_at, author:tk_people(full_name)").in("task_id", ids).eq("category", "Artist Note").order("created_at", { ascending: false }),
-    db.from("tk_assignments").select("task_id, person:tk_people(id, full_name)").in("task_id", ids),
-    db.from("tk_tasks").select("id, name, type_id, node_id, status_key").in("node_id", nodeIds).eq("archived", false),
+  const [nodes, versions, notes, assigns, siblings] = await Promise.all([
+    db.from("tk_nodes").select("id, parent_id, name, project_id").in("project_id", projectIds).then((r) => must(r, "review.nodes")),
+    db.from("tk_versions").select("id, task_id, number, link, note, submitted_at, by:tk_people(full_name)").in("task_id", ids).order("submitted_at", { ascending: false }).then((r) => must(r, "review.versions")),
+    db.from("tk_notes").select("task_id, body, created_at, author:tk_people(full_name)").in("task_id", ids).eq("category", "Artist Note").order("created_at", { ascending: false }).then((r) => must(r, "review.notes")),
+    db.from("tk_assignments").select("task_id, person:tk_people(id, full_name)").in("task_id", ids).then((r) => must(r, "review.assigns")),
+    db.from("tk_tasks").select("id, name, type_id, node_id, status_key").in("node_id", nodeIds).eq("archived", false).then((r) => must(r, "review.siblings")),
   ]);
   const byId = new Map((nodes ?? []).map((n) => [n.id, n]));
   const pathOf = (nodeId: string) => { const out: string[] = []; let cur = byId.get(nodeId); const unit = cur?.name ?? ""; cur = cur?.parent_id ? byId.get(cur.parent_id) : undefined; while (cur) { out.unshift(cur.name); cur = cur.parent_id ? byId.get(cur.parent_id) : undefined; } return { path: out, unit }; };

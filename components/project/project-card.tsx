@@ -23,7 +23,7 @@ export function ProjectCard({ p }: { p: ProjectCardData }) {
         </div>
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
-        <Chip tone="amber" label={`${s.inReview} in review`} tip="Tasks waiting for a supervisor's decision" />
+        <Chip tone="neutral" label={`${s.inReview} in review`} tip="Tasks waiting for a supervisor's decision" />
         <Chip tone={s.overdue ? "red" : "muted"} label={`${s.overdue} overdue`} tip="Due date has passed and the task is not completed" pulse={s.overdue > 0} />
         <Chip tone={s.atRisk ? "amber" : "muted"} label={`${s.atRisk} at risk`} tip="Due within 3 days and not started, or waiting in review for more than 2 days" />
       </div>

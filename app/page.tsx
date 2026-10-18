@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
           </div>
           <Legend items={[
             { tone: "green", label: "ring", meaning: "share of tasks completed" },
-            { tone: "amber", label: "in review", meaning: "waiting for a supervisor" },
+            { tone: "neutral", label: "in review", meaning: "waiting for a supervisor" },
             { tone: "red", label: "overdue", meaning: "past due, not completed" },
             { tone: "amber", label: "at risk", meaning: "due soon, not started / stuck in review" },
           ]} />

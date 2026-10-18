@@ -6,7 +6,7 @@ type Ctx = { isAssignee: boolean };
 const TABLE: Record<StatusKey, Partial<Record<Role, StatusKey[]>>> = {
   waiting: { production: ["ready", "on_hold", "cancelled"] },
   ready: { production: ["in_progress", "on_hold", "cancelled"], artist: ["in_progress"] },
-  in_progress: { production: ["pending_review", "on_hold", "cancelled"], artist: ["pending_review"] },
+  in_progress: { production: ["pending_review", "on_hold", "cancelled"] },  // artists reach Pending Review by submitting a version
   pending_review: { production: ["completed", "comments"], supervisor: ["completed", "comments"] },
   comments: { production: ["in_progress", "on_hold", "cancelled"], artist: ["in_progress"] },
   completed: { production: ["comments", "in_progress"] },

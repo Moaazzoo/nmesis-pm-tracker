@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { STATUS_BY_KEY } from "@/lib/statuses";
 import { NOTE_CATEGORIES, type NoteCategory } from "@/lib/notes";
 import type { StatusKey } from "@/lib/types";
@@ -16,18 +16,23 @@ export function StatusControl({ taskId, current, options, needsNote = [], noteCa
   const [open, setOpen] = useState(false);
   const [noteFor, setNoteFor] = useState<StatusKey | null>(null);
   const [body, setBody] = useState("");
+  const REOPEN = ["completed", "cancelled"];
+  const defaultCategoryFor = (to: StatusKey): NoteCategory => REOPEN.includes(current) ? "Production Note" : to === "comments" ? (noteCategories.includes("Supervisor Feedback") ? "Supervisor Feedback" : noteCategories.includes("Client Feedback") ? "Client Feedback" : "Production Note") : noteCategories[0] ?? "Production Note";
   const [category, setCategory] = useState<NoteCategory>(noteCategories[0] ?? "Production Note");
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  useEffect(() => { setShown(current); }, [current]);
   const st = STATUS_BY_KEY[shown];
 
   const commit = (to: StatusKey, note?: { category: NoteCategory; body: string }) => {
     const before = shown;
     setShown(to); setOpen(false); setNoteFor(null); setError(null);
     start(async () => {
-      const r = await onChange({ taskId, to, note });
-      if (!r.ok) { setShown(before); setError(r.error); }
-      else setBody("");
+      try {
+        const r = await onChange({ taskId, to, note });
+        if (!r.ok) { setShown(before); setError(r.error); }
+        else setBody("");
+      } catch { setShown(before); setError("Could not reach the server — nothing was changed. Check the connection and try again."); }
     });
   };
 
@@ -44,7 +49,7 @@ export function StatusControl({ taskId, current, options, needsNote = [], noteCa
         <ul role="menu" className="absolute left-0 top-full z-50 mt-1 min-w-[190px] rounded-[12px] border border-line-strong bg-panel2 p-1 shadow-xl">
           {options.map((o) => (
             <li key={o} role="none">
-              <button role="menuitem" type="button" onClick={() => (needsNote.includes(o) ? (setNoteFor(o), setOpen(false)) : commit(o))}
+              <button role="menuitem" type="button" onClick={() => (needsNote.includes(o) ? (setNoteFor(o), setCategory(defaultCategoryFor(o)), setOpen(false)) : commit(o))}
                 className="block w-full rounded-[8px] px-3 py-1.5 text-left text-[12px] text-ink hover:bg-[rgba(169,227,75,.08)]">{STATUS_BY_KEY[o].name}</button>
             </li>
           ))}
@@ -53,9 +58,11 @@ export function StatusControl({ taskId, current, options, needsNote = [], noteCa
       {noteFor && (
         <form className="absolute left-0 top-full z-50 mt-1 w-[320px] rounded-[12px] border border-line-strong bg-panel2 p-3 shadow-xl" onSubmit={(e) => { e.preventDefault(); commit(noteFor, { category, body }); }}>
           <p className="font-label mb-2 text-[9px] text-faint">Note required to move to {STATUS_BY_KEY[noteFor].name}</p>
-          {noteCategories.length > 1 && (
+          {REOPEN.includes(current)
+            ? <p className="mb-2 text-[11px] text-muted">Filed as a Production Note (the reason for reopening).</p>
+            : noteCategories.length > 1 && (
             <select value={category} onChange={(e) => setCategory(e.target.value as NoteCategory)} className="mb-2 w-full rounded-[8px] border border-line-strong bg-bg px-2 py-1 text-[12px]">
-              {NOTE_CATEGORIES.filter((c) => noteCategories.includes(c)).map((c) => <option key={c}>{c}</option>)}
+              {NOTE_CATEGORIES.filter((c) => noteCategories.includes(c) && c !== "Task Definition" && c !== "Artist Note").map((c) => <option key={c}>{c}</option>)}
             </select>
           )}
           <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={3} autoFocus placeholder="What should change?" className="w-full rounded-[8px] border border-line-strong bg-bg px-2 py-1 text-[12px] text-ink" />

@@ -11,7 +11,7 @@ function StartButton({ t }: { t: QueueTask }) {
   if (done) return <Chip tone="neutral" label="In Progress" tip="Started" />;
   return (
     <span className="flex items-center gap-2">
-      <button type="button" disabled={pending} onClick={() => start(async () => { const r = await setStatus({ taskId: t.id, to: "in_progress" }); if (r.ok) setDone(true); else setError(r.error); })}
+      <button type="button" disabled={pending} onClick={() => start(async () => { try { const r = await setStatus({ taskId: t.id, to: "in_progress" }); if (r.ok) setDone(true); else setError(r.error); } catch { setError("Could not reach the server — nothing was changed."); } })}
         className="rounded-full bg-green px-3 py-1 font-label text-[9px] font-bold text-[#0a0c0a] disabled:opacity-50" data-tip="Moves the task to In Progress">Start</button>
       {error && <span role="alert" className="text-[11px] text-red">{error}</span>}
     </span>

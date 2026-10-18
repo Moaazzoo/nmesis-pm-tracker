@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Drawer } from "@/components/ui/drawer";
 import { Chip } from "@/components/ui/chip";
 import { Avatar } from "@/components/ui/avatar";
-import { TaskStatus, TaskDue } from "./task-controls";
+import { TaskStatus, TaskDue, TaskCritical } from "./task-controls";
 import { NotesTab } from "./notes-tab";
 import { VersionsTab } from "./versions-tab";
 import { HistoryTab } from "./history-tab";
@@ -36,6 +36,7 @@ export async function TaskDrawer({ taskId, person, base, tab = "notes" }: { task
           <TaskStatus t={t} rights={rights} />
           <span className="flex items-center gap-1.5">{t.assignees.length === 0 ? <span className="text-faint">Unassigned</span> : t.assignees.map((a) => <span key={a.id} className="flex items-center gap-1"><Avatar name={a.full_name} size={20} />{a.full_name}</span>)}</span>
           <span className="flex items-center gap-1"><span className="text-faint">Due</span><TaskDue t={t} rights={rights} /></span>
+          <TaskCritical t={t} rights={rights} />
         </div>
         {t.description && <p className="mt-2 text-[12px] text-muted">{t.description}</p>}
       </div>

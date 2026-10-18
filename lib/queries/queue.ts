@@ -1,4 +1,5 @@
 import "server-only";
+import { must } from "./db";
 import { adminClient } from "@/lib/supabase/admin";
 import { risk } from "@/lib/risk";
 import { stateByStatusKey } from "./projects";
@@ -8,19 +9,19 @@ import type { State } from "@/lib/types";
 /** Everything assigned to one person on active projects, grouped for their queue. */
 export async function loadQueue(personId: string, now = new Date()): Promise<{ groups: QueueGroup[]; total: number }> {
   const db = adminClient();
-  const { data: rows } = await db.from("tk_assignments")
+  const rows = must(await db.from("tk_assignments")
     .select("task:tk_tasks!inner(id, project_id, node_id, name, status_key, due_date, status_since, critical, archived, type:tk_task_types(name), project:tk_projects!inner(id, name, status))")
-    .eq("person_id", personId).eq("task.archived", false).eq("task.project.status", "active");
+    .eq("person_id", personId).eq("task.archived", false).eq("task.project.status", "active"), "queue.rows");
   const one = <T,>(x: T | T[] | null | undefined): T | null => (Array.isArray(x) ? x[0] ?? null : x ?? null);
   const tasks = (rows ?? []).map((r) => one(r.task as unknown as Record<string, unknown> | Record<string, unknown>[])).filter((t): t is Record<string, unknown> => !!t);
   if (tasks.length === 0) return { groups: groupQueue([]), total: 0 };
   const ids = tasks.map((t) => t.id as string);
   const projectIds = [...new Set(tasks.map((t) => t.project_id as string))];
-  const [{ data: nodes }, { data: notes }, { data: versions }, { data: assigns }, states] = await Promise.all([
-    db.from("tk_nodes").select("id, parent_id, name, project_id").in("project_id", projectIds),
-    db.from("tk_notes").select("task_id, category, body, created_at, author:tk_people(full_name)").in("task_id", ids).in("category", ["Supervisor Feedback", "Client Feedback", "Production Note"]).order("created_at", { ascending: false }),
-    db.from("tk_versions").select("task_id, number").in("task_id", ids),
-    db.from("tk_assignments").select("task_id, person:tk_people(id, full_name)").in("task_id", ids),
+  const [nodes, notes, versions, assigns, states] = await Promise.all([
+    db.from("tk_nodes").select("id, parent_id, name, project_id").in("project_id", projectIds).then((r) => must(r, "queue.nodes")),
+    db.from("tk_notes").select("task_id, category, body, created_at, author:tk_people(full_name)").in("task_id", ids).in("category", ["Supervisor Feedback", "Client Feedback", "Production Note"]).order("created_at", { ascending: false }).then((r) => must(r, "queue.notes")),
+    db.from("tk_versions").select("task_id, number").in("task_id", ids).then((r) => must(r, "queue.versions")),
+    db.from("tk_assignments").select("task_id, person:tk_people(id, full_name)").in("task_id", ids).then((r) => must(r, "queue.assigns")),
     stateByStatusKey(),
   ]);
   const byId = new Map((nodes ?? []).map((n) => [n.id, n]));

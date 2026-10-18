@@ -29,6 +29,11 @@ export type Plan = {
   warnings: string[];
 };
 
+/** After the first import the tracker owns the rows: re-runs only add what is missing. */
+export function upsertOptions(_mode: "full" | "versions"): { onConflict: "ftrack_id"; ignoreDuplicates: true } {
+  return { onConflict: "ftrack_id", ignoreDuplicates: true };
+}
+
 const ACTIVE_TYPES = new Set(["Layout", "Modeling", "Shading", "Animation", "FX", "Lighting", "Compositing", "Editing"]);
 
 /** A readable name from an e-mail-style ftrack username: "m.elturkman" → "M Elturkman". */

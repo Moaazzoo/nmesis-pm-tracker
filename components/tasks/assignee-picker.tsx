@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Avatar } from "@/components/ui/avatar";
 
 type P = { id: string; full_name: string };
@@ -11,11 +11,12 @@ export function AssigneePicker({ taskId, assignees, people, canEdit, onChange }:
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  useEffect(() => { setShown(assignees); }, [assignees]);
   const toggle = (p: P) => {
     const before = shown;
     const next = shown.some((a) => a.id === p.id) ? shown.filter((a) => a.id !== p.id) : [...shown, p];
     setShown(next); setError(null);
-    start(async () => { const r = await onChange({ taskId, personIds: next.map((a) => a.id) }); if (!r.ok) { setShown(before); setError(r.error); } });
+    start(async () => { try { const r = await onChange({ taskId, personIds: next.map((a) => a.id) }); if (!r.ok) { setShown(before); setError(r.error); } } catch { setShown(before); setError("Could not reach the server — nothing was changed."); } });
   };
   const list = shown.length === 0 ? <span className="text-[12px] text-faint">Unassigned</span>
     : shown.map((a) => <span key={a.id} className="flex items-center gap-1.5"><Avatar name={a.full_name} size={20} /><span className="truncate text-[12px]">{a.full_name}</span></span>);

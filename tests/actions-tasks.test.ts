@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { applyStatus, type TaskRepo } from "@/lib/actions/tasks-core";
-import type { Person } from "@/lib/types";
+import type { Discipline, Person } from "@/lib/types";
 
 const person = (role: Person["role"], extra: Partial<Person> = {}): Person => ({ id: `p-${role}`, full_name: role, role, discipline: null, is_admin: false, profile_id: null, ...extra });
 
@@ -9,11 +9,12 @@ function fakeRepo(task: { id: string; project_id: string; status_key: string; as
   return {
     log, activity,
     getTask: vi.fn(async () => ({ ...task })),
-    updateStatus: vi.fn(async (_id, to) => { task.status_key = to; }),
+    updateStatus: vi.fn(async (_id, to) => { task.status_key = to; return true; }),
     insertStatusLog: vi.fn(async (r) => { log.push(`${r.from}->${r.to}`); }),
     insertNote: vi.fn(async () => "note-1"),
     insertActivity: vi.fn(async (a) => { activity.push(`${a.action}:${a.notify.sort().join(",")}`); }),
-    listSupervisors: vi.fn(async () => ["sup-cg", "sup-vfx"]),
+    listSupervisors: vi.fn(async (d?: Discipline | null) => (d ? [`sup-${d.toLowerCase()}`] : ["sup-cg", "sup-vfx"])),
+    taskDiscipline: vi.fn(async (): Promise<Discipline | null> => null),
   };
 }
 
@@ -35,12 +36,12 @@ describe("applyStatus", () => {
     const r = await applyStatus(repo, person("supervisor"), { taskId: "t1", to: "comments", note: { category: "Supervisor Feedback", body: "Tighten the matte." } });
     expect(r.ok).toBe(true);
     expect(repo.log).toEqual(["pending_review->comments"]);
-    expect(repo.activity).toEqual(["status:p-artist"]);
+    expect(repo.activity).toEqual(["status:p-artist", "note:"]);
     expect(repo.insertNote).toHaveBeenCalledTimes(1);
   });
-  it("notifies supervisors when a task reaches Pending Review", async () => {
+  it("notifies every supervisor when an untyped task reaches Pending Review", async () => {
     const repo = fakeRepo({ id: "t1", project_id: "pr", status_key: "in_progress", assignees: ["p-artist"] });
-    const r = await applyStatus(repo, person("artist"), { taskId: "t1", to: "pending_review" });
+    const r = await applyStatus(repo, person("production"), { taskId: "t1", to: "pending_review" });
     expect(r.ok).toBe(true);
     expect(repo.activity).toEqual(["status:sup-cg,sup-vfx"]);
   });

@@ -1,4 +1,5 @@
 import "server-only";
+import { must } from "./db";
 import { adminClient } from "@/lib/supabase/admin";
 import { mergeHistory, type HistoryItem } from "@/lib/actions/drawer-core";
 import { stateByStatusKey } from "./projects";
@@ -12,14 +13,16 @@ export type TaskDetail = { task: TaskRow & { project_id: string; path: string[];
 
 export async function loadTask(taskId: string, now = new Date()): Promise<TaskDetail | null> {
   const db = adminClient();
-  const { data: t } = await db.from("tk_tasks").select("id, project_id, node_id, name, status_key, due_date, status_since, critical, description, type:tk_task_types(name), assignees:tk_assignments(person:tk_people(id, full_name))").eq("id", taskId).maybeSingle();
+  const tr = await db.from("tk_tasks").select("id, project_id, node_id, name, status_key, due_date, status_since, critical, description, type:tk_task_types(name), assignees:tk_assignments(person:tk_people(id, full_name))").eq("id", taskId).maybeSingle();
+  if (tr.error) throw new Error(`task: ${tr.error.message}`);
+  const t = tr.data;
   if (!t) return null;
-  const [{ data: nodes }, { data: notes }, { data: versions }, { data: log }, { data: activity }, states] = await Promise.all([
-    db.from("tk_nodes").select("id, parent_id, name").eq("project_id", t.project_id),
-    db.from("tk_notes").select("id, category, source_label, body, created_at, reply_to_id, author:tk_people(full_name), version:tk_versions(number)").eq("task_id", taskId).order("created_at"),
-    db.from("tk_versions").select("id, number, asset_name, link, status, note, submitted_at, source, by:tk_people(full_name)").eq("task_id", taskId).order("submitted_at", { ascending: false }),
-    db.from("tk_status_log").select("id, at, from_status_key, to_status_key, by:tk_people(full_name)").eq("task_id", taskId),
-    db.from("tk_activity").select("id, at, action, payload, actor:tk_people(full_name)").eq("task_id", taskId),
+  const [nodes, notes, versions, log, activity, states] = await Promise.all([
+    db.from("tk_nodes").select("id, parent_id, name").eq("project_id", t.project_id).then((r) => must(r, "task.nodes")),
+    db.from("tk_notes").select("id, category, source_label, body, created_at, reply_to_id, author:tk_people(full_name), version:tk_versions(number)").eq("task_id", taskId).order("created_at").then((r) => must(r, "task.notes")),
+    db.from("tk_versions").select("id, number, asset_name, link, status, note, submitted_at, source, by:tk_people(full_name)").eq("task_id", taskId).order("submitted_at", { ascending: false }).then((r) => must(r, "task.versions")),
+    db.from("tk_status_log").select("id, at, from_status_key, to_status_key, by:tk_people(full_name)").eq("task_id", taskId).then((r) => must(r, "task.log")),
+    db.from("tk_activity").select("id, at, action, payload, actor:tk_people(full_name)").eq("task_id", taskId).then((r) => must(r, "task.activity")),
     stateByStatusKey(),
   ]);
   const byId = new Map((nodes ?? []).map((n) => [n.id, n]));

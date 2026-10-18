@@ -6,7 +6,7 @@ import { getCurrentPerson } from "@/lib/auth";
 import { can } from "@/lib/permissions";
 import { adminClient } from "@/lib/supabase/admin";
 import { supabaseRepo } from "./repo";
-import { applyArchive, applyCreateTasks, TEMPLATES, type SetupRepo } from "./setup-core";
+import { applyArchive, applyCreateTasks, descendantIds, TEMPLATES, type SetupRepo } from "./setup-core";
 import type { ActionResult } from "./tasks-core";
 
 function setupRepo(): SetupRepo {
@@ -16,6 +16,14 @@ function setupRepo(): SetupRepo {
     async typeIdByName(name) { const { data } = await db.from("tk_task_types").select("id").eq("name", name).maybeSingle(); return data?.id ?? null; },
     async insertTasks(rows) { const { data, error } = await db.from("tk_tasks").insert(rows).select("id"); if (error) throw new Error(error.message); return (data ?? []).map((r) => r.id); },
     async archive(kind, id) {
+      if (kind === "node") {
+        const { data: node } = await db.from("tk_nodes").select("project_id").eq("id", id).maybeSingle();
+        const { data: all } = await db.from("tk_nodes").select("id, parent_id").eq("project_id", node?.project_id ?? "");
+        const ids = descendantIds(all ?? [], id);
+        const t = await db.from("tk_tasks").update({ archived: true }).in("node_id", ids); if (t.error) throw new Error(t.error.message);
+        const n = await db.from("tk_nodes").update({ archived: true }).in("id", ids); if (n.error) throw new Error(n.error.message);
+        return;
+      }
       const table = { task: "tk_tasks", node: "tk_nodes", milestone: "tk_milestones", project: "tk_projects" }[kind];
       const { error } = kind === "project" ? await db.from(table).update({ status: "archived" }).eq("id", id) : await db.from(table).update({ archived: true }).eq("id", id);
       if (error) throw new Error(error.message);

@@ -12,9 +12,12 @@ type PassTask = { id: string; name: string; type_id: string; node_id: string };
 export function nextPass<T extends PassTask>(tasks: T[], task: T): T | null {
   const { pass_no } = parsePass(task.name);
   if (pass_no === null) return null;
+  const { base } = parsePass(task.name);
   return (
-    tasks.find(
-      (t) => t.id !== task.id && t.node_id === task.node_id && t.type_id === task.type_id && parsePass(t.name).pass_no === pass_no + 1
-    ) ?? null
+    tasks.find((t) => {
+      if (t.id === task.id || t.node_id !== task.node_id || t.type_id !== task.type_id) return false;
+      const p = parsePass(t.name);
+      return p.pass_no === pass_no + 1 && p.base.toLowerCase() === base.toLowerCase();
+    }) ?? null
   );
 }

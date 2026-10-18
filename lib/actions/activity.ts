@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getCurrentPerson } from "@/lib/auth";
 import { adminClient } from "@/lib/supabase/admin";
-import { withoutReader } from "@/lib/queries/activity-shape";
+import { safeRedirect, withoutReader } from "@/lib/queries/activity-shape";
 
 /** Marks one item (or all) read for the current person, then goes to the task if there is one. */
 export async function markRead(form: FormData) {
@@ -14,5 +14,5 @@ export async function markRead(form: FormData) {
   const { data } = await q;
   for (const r of data ?? []) await db.from("tk_activity").update({ unread_by: withoutReader(r.unread_by ?? [], me.id) }).eq("id", r.id);
   revalidatePath("/", "layout");
-  redirect(to || "/");
+  redirect(safeRedirect(to));
 }

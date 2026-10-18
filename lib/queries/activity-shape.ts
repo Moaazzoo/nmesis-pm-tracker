@@ -7,6 +7,12 @@ export function unreadFor(rows: ActivityRow[], personId: string): ActivityRow[] 
   return rows.filter((r) => r.unread_by.includes(personId)).sort((a, b) => b.at.localeCompare(a.at));
 }
 
+/** Only same-site paths may be used as a redirect target. */
+export function safeRedirect(to: string | null | undefined): string {
+  if (!to || !to.startsWith("/") || to.startsWith("//")) return "/";
+  return to;
+}
+
 export function withoutReader(unread: string[], personId: string): string[] {
   return unread.filter((p) => p !== personId);
 }

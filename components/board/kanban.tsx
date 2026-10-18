@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { fmtDay } from "@/components/tasks/task-row";
 import { STATUS_BY_KEY } from "@/lib/statuses";
@@ -53,6 +53,7 @@ export function Kanban({ tasks, unitNames, legal, onMove, openBase = "?task=" }:
   const [dragging, setDragging] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [, start] = useTransition();
+  useEffect(() => { setList(tasks); }, [tasks]);
   const { columns, rail } = columnsFor(list);
   const drop = (to: StatusKey) => {
     const id = dragging; setDragging(null); if (!id) return;
@@ -60,7 +61,7 @@ export function Kanban({ tasks, unitNames, legal, onMove, openBase = "?task=" }:
     if (!(legal[id] ?? []).includes(to)) { setError(`${task.name}: you cannot move it to ${STATUS_BY_KEY[to].name} from ${STATUS_BY_KEY[task.status_key as StatusKey]?.name ?? task.status_key}.`); return; }
     const before = list;
     setList(list.map((t) => (t.id === id ? { ...t, status_key: to, state: COLUMNS.find((c) => c.key === to)!.state } : t))); setError(null);
-    start(async () => { const r = await onMove({ taskId: id, to }); if (!r.ok) { setList(before); setError(r.error); } });
+    start(async () => { try { const r = await onMove({ taskId: id, to }); if (!r.ok) { setList(before); setError(r.error); } } catch { setList(before); setError("Could not reach the server — nothing was changed."); } });
   };
   return (
     <div>

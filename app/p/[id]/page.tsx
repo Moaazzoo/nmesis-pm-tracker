@@ -44,8 +44,8 @@ export default async function ProjectBoard({ params, searchParams }: { params: P
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <Filters current={sp} people={board.people} types={board.types} />
           <Legend items={[
-            { tone: "amber", label: "Pending Review", meaning: "waiting for a supervisor" },
-            { tone: "red", label: "Comments", meaning: "sent back to the artist" },
+            { tone: "neutral", label: "Pending Review", meaning: "waiting for a supervisor" },
+            { tone: "neutral", label: "Comments", meaning: "sent back to the artist" },
             { tone: "green", label: "Completed", meaning: "approved and done" },
             { tone: "red", label: "date", meaning: "overdue" },
             { tone: "amber", label: "date", meaning: "due soon or stuck in review" },

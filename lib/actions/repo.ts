@@ -14,9 +14,18 @@ export function supabaseRepo(): TaskRepo & FieldRepo & DrawerRepo & ReviewRepo {
       if (!data) return null;
       return { id: data.id, project_id: data.project_id, status_key: data.status_key, assignees: ((data.assignees as unknown as { person_id: string }[]) ?? []).map((a) => a.person_id) };
     },
-    async updateStatus(id, to, at) {
-      const { error } = await db.from("tk_tasks").update({ status_key: to, status_since: at.toISOString(), updated_at: at.toISOString() }).eq("id", id);
+    async updateStatus(id, to, at, from) {
+      let q = db.from("tk_tasks").update({ status_key: to, status_since: at.toISOString(), updated_at: at.toISOString() }).eq("id", id);
+      if (from) q = q.eq("status_key", from);
+      const { data, error } = await q.select("id");
       if (error) throw new Error(error.message);
+      return (data ?? []).length === 1;
+    },
+    async versionTask(versionId) { const { data } = await db.from("tk_versions").select("task_id").eq("id", versionId).maybeSingle(); return data?.task_id ?? null; },
+    async noteTask(noteId) { const { data } = await db.from("tk_notes").select("task_id").eq("id", noteId).maybeSingle(); return data?.task_id ?? null; },
+    async setLatestVersionStatus(taskId, status) {
+      const { data } = await db.from("tk_versions").select("id").eq("task_id", taskId).order("submitted_at", { ascending: false }).limit(1);
+      if (data?.[0]) { const { error } = await db.from("tk_versions").update({ status }).eq("id", data[0].id); if (error) throw new Error(error.message); }
     },
     async insertStatusLog(r) {
       const { error } = await db.from("tk_status_log").insert({ task_id: r.taskId, from_status_key: r.from, to_status_key: r.to, by_person_id: r.by, at: r.at.toISOString() });
@@ -57,12 +66,11 @@ export function supabaseRepo(): TaskRepo & FieldRepo & DrawerRepo & ReviewRepo {
       return (data ?? []).map((p) => p.id);
     },
     async setAssignees(taskId, personIds) {
-      const del = await db.from("tk_assignments").delete().eq("task_id", taskId);
-      if (del.error) throw new Error(del.error.message);
-      if (personIds.length) {
-        const ins = await db.from("tk_assignments").insert(personIds.map((person_id) => ({ task_id: taskId, person_id })));
-        if (ins.error) throw new Error(ins.error.message);
-      }
+      const { data: cur } = await db.from("tk_assignments").select("person_id").eq("task_id", taskId);
+      const have = new Set((cur ?? []).map((a) => a.person_id as string)); const want = new Set(personIds);
+      const add = personIds.filter((p) => !have.has(p)); const remove = [...have].filter((p) => !want.has(p));
+      if (add.length) { const ins = await db.from("tk_assignments").insert(add.map((person_id) => ({ task_id: taskId, person_id }))); if (ins.error) throw new Error(ins.error.message); }
+      if (remove.length) { const del = await db.from("tk_assignments").delete().eq("task_id", taskId).in("person_id", remove); if (del.error) throw new Error(del.error.message); }
     },
     async setDue(taskId, due) {
       const { error } = await db.from("tk_tasks").update({ due_date: due, updated_at: new Date().toISOString() }).eq("id", taskId);

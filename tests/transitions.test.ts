@@ -11,8 +11,11 @@ const production = person("production");
 const viewer = person("viewer");
 
 describe("legalNext", () => {
-  it("artist assigned to an In Progress task may only move it to Pending Review", () => {
-    expect(legalNext("in_progress", artist, { isAssignee: true })).toEqual(["pending_review"]);
+  it("artist assigned to an In Progress task has no manual move — submitting a version is what moves it", () => {
+    expect(legalNext("in_progress", artist, { isAssignee: true })).toEqual([]);
+  });
+  it("artist assigned to a Ready task may start it", () => {
+    expect(legalNext("ready", artist, { isAssignee: true })).toEqual(["in_progress"]);
   });
   it("artist who is not the assignee may do nothing", () => {
     expect(legalNext("in_progress", artist, { isAssignee: false })).toEqual([]);

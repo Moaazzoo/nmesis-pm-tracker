@@ -10,7 +10,8 @@ function fakeRepo(tasks: { id: string; project_id: string; status_key: string; a
     status, notes, activity,
     getTask: vi.fn(async (id) => { const t = tasks.find((x) => x.id === id); return t ? { id: t.id, project_id: t.project_id, status_key: t.status_key, assignees: t.assignees } : null; }),
     siblingTasks: vi.fn(async (id) => { const t = tasks.find((x) => x.id === id)!; return tasks.filter((x) => x.node_id === t.node_id).map((x) => ({ id: x.id, name: x.name, type_id: x.type_id, node_id: x.node_id, status_key: x.status_key })); }),
-    updateStatus: vi.fn(async (id, to) => { tasks.find((x) => x.id === id)!.status_key = to; }),
+    updateStatus: vi.fn(async (id, to) => { tasks.find((x) => x.id === id)!.status_key = to; return true; }),
+    setLatestVersionStatus: vi.fn(async () => {}),
     insertStatusLog: vi.fn(async (r) => { status.push(`${r.taskId}:${r.from}->${r.to}`); }),
     insertNote: vi.fn(async (n) => { notes.push(`${n.category}:${n.body}`); return "n1"; }),
     insertActivity: vi.fn(async (a) => { activity.push(`${a.taskId}:${a.action}:${a.notify.sort().join(",")}`); }),
@@ -50,7 +51,7 @@ describe("applySendBack", () => {
     expect(r.ok).toBe(true);
     expect(repo.status).toEqual(["t1:pending_review->comments"]);
     expect(repo.notes).toEqual(["Supervisor Feedback:Tighten the matte."]);
-    expect(repo.activity).toEqual(["t1:status:p-artist"]);
+    expect(repo.activity).toEqual(["t1:status:p-artist", "t1:note:"]);
   });
 });
 

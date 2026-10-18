@@ -6,7 +6,7 @@ import { Chip } from "@/components/ui/chip";
 import type { Note } from "@/lib/queries/task";
 import type { NoteCategory } from "@/lib/notes";
 
-const CAT_TONE: Record<string, "green" | "amber" | "red" | "neutral" | "muted"> = { "Task Definition": "neutral", "Artist Note": "muted", "Supervisor Feedback": "amber", "Client Feedback": "red", "Production Note": "neutral" };
+const CAT_TONE: Record<string, "green" | "amber" | "red" | "neutral" | "muted"> = { "Task Definition": "neutral", "Artist Note": "muted", "Supervisor Feedback": "neutral", "Client Feedback": "neutral", "Production Note": "muted" };
 
 function fmt(ts: string) { return new Date(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
 

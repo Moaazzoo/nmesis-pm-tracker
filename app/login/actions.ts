@@ -14,25 +14,30 @@ export async function signIn(formData: FormData) {
   const supabase = await serverClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) redirect("/login?error=invalid");
-  const person = await getCurrentPerson();
+  let person: Awaited<ReturnType<typeof getCurrentPerson>> = null;
+  try { person = await getCurrentPerson(); } catch { redirect("/no-access"); }
   redirect(landingFor(person?.role ?? "viewer"));
 }
 
 export async function signOut() {
   const supabase = await serverClient();
   await supabase.auth.signOut();
-  (await cookies()).delete("tk_lens");
+  const store = await cookies(); store.delete("tk_lens"); store.delete("tk_lens_person");
   redirect("/login");
 }
 
 /** Admins only: view the app as another role. Empty value clears the lens. */
 export async function setLens(formData: FormData) {
   const person = await getCurrentPerson();
-  if (!person?.is_admin) redirect("/");
+  if (!person?.own_is_admin) redirect("/");
   const value = String(formData.get("lens") ?? "");
+  const who = String(formData.get("person_id") ?? "");
   const store = await cookies();
-  if (!value) store.delete("tk_lens");
-  else store.set("tk_lens", value, { path: "/", sameSite: "lax", httpOnly: true });
-  const role = effectiveRole({ ...person, role: person.own_role }, value || undefined) as Role;
+  if (!value) { store.delete("tk_lens"); store.delete("tk_lens_person"); }
+  else {
+    store.set("tk_lens", value, { path: "/", sameSite: "lax", httpOnly: true });
+    if (value === "artist" && who) store.set("tk_lens_person", who, { path: "/", sameSite: "lax", httpOnly: true }); else store.delete("tk_lens_person");
+  }
+  const role = effectiveRole({ ...person, role: person.own_role, is_admin: true }, value || undefined) as Role;
   redirect(landingFor(role));
 }
