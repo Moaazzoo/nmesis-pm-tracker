@@ -1,0 +1,222 @@
+{
+ "projects_by_status": {
+  "hidden": 133,
+  "active": 4
+ },
+ "tasks_total": 11194,
+ "tasks_with_dates": 9082,
+ "tasks_with_bid": 0,
+ "tasks_with_timelogged": 1,
+ "tasks_assigned": 9275,
+ "tasks_by_status_id": {
+  "9bb65936-88e7-11e3-9264-04011030cf01": 8097,
+  "a8629d12-75e6-4c33-a61b-c08a869eb2c5": 1293,
+  "44dd9fb2-4164-11df-9218-0019bb4983d8": 1077,
+  "9078de1a-40ce-11ed-a028-8e70b81a65da": 101,
+  "a0bc2444-15e2-11e1-b21a-0019bb4983d8": 198,
+  "3d26eb13-d6bb-4fe2-a131-caba7138d25e": 320,
+  "44ddd0fe-4164-11df-9218-0019bb4983d8": 21,
+  "44dded64-4164-11df-9218-0019bb4983d8": 40,
+  "48daa8ae-c023-4439-8925-13b00402f5dd": 9,
+  "35b6a066-c14e-4c79-9131-f15f606db9d3": 25,
+  "2286947e-a2d4-11e9-825d-d27cf242b68b": 5,
+  "375d7b72-95e3-4ca9-a1a7-c472ad8b8fb8": 4,
+  "0ebd0d08-30ca-4899-80b1-b7fc8da10557": 1,
+  "b89bdbfe-c87a-4f19-a6ff-7fb71c85ad15": 2,
+  "30e38d36-ff3c-457a-be1e-4e858f2afc62": 1
+ },
+ "tasks_by_type_id": {
+  "44dd23b6-4164-11df-9218-0019bb4983d8": 3531,
+  "44dd08fe-4164-11df-9218-0019bb4983d8": 4040,
+  "44dc3636-4164-11df-9218-0019bb4983d8": 491,
+  "44dc53c8-4164-11df-9218-0019bb4983d8": 1338,
+  "ffaebf7a-9dca-11e9-8346-d27cf242b68b": 243,
+  "c46e3445-6586-4b82-924a-1086e14e2645": 915,
+  "110574b2-07b0-422f-add4-842eb520eb21": 11,
+  "5564cf84-1135-4e2c-aa71-c9aac786c967": 52,
+  "ed0d6050-d7fe-4f37-b897-edd9fe4cc10e": 77,
+  "cc46c4c6-13d2-11e3-8915-f23c91dfaa16": 80,
+  "e96d5a2e-cc94-4db9-b4ee-33a513957622": 39,
+  "f089ee01-728e-49d6-866d-de423ba5986b": 40,
+  "44dcea86-4164-11df-9218-0019bb4983d8": 213,
+  "262225e8-9dcb-11e9-82b8-d27cf242b68b": 30,
+  "7981cfb4-98cb-476f-8beb-7320b40b9942": 34,
+  "44dc6ffc-4164-11df-9218-0019bb4983d8": 23,
+  "28066db0-e98c-4045-9b1a-9ce28d667481": 20,
+  "4e390be7-2355-43a0-ac1a-6a03d39967df": 4,
+  "96109073-b5f2-455e-b75f-a46843467d7b": 3,
+  "9a8f7d90-f725-4ef8-9aa5-9bbbadabd233": 3,
+  "829daaa0-068b-4493-8d80-fd4fb3f92ec0": 4,
+  "a8d52340-2a05-4daa-885e-e33cb1948621": 2,
+  "cd667b58-57b4-4088-b67d-28878e0996ad": 1
+ },
+ "tasks_by_priority_id": {
+  "9661b320-3a0c-11e2-81c1-0800200c9a66": 11090,
+  "847fb90e-ead3-11e2-846c-f23c91dfaa16": 16,
+  "847f9cda-ead3-11e2-846c-f23c91dfaa16": 47,
+  "e2947571-5d3e-4537-895c-b3d916e7a924": 7,
+  "33c12da9-1721-427d-9d28-75bf44d487f2": 33,
+  "847f663e-ead3-11e2-846c-f23c91dfaa16": 1
+ },
+ "typedcontext_by_object_type_id": {
+  "11c137c0-ee7e-4f9c-91c5-8c77cec22b2c": 11194,
+  "3c133785-51cb-11e3-980a-20c9d0831e59": 683,
+  "01decdd1-51cb-11e3-9d5b-20c9d0831e59": 630,
+  "4be63b64-5010-42fb-bf1f-428af9d638f0": 1500,
+  "34b122f0-bd5c-11eb-96ea-d6270330280e": 356,
+  "bad911de-3bd6-47b9-8b46-3476e237cb36": 999,
+  "e5139355-61da-4c8f-9db4-3abc870166bc": 850
+ },
+ "typedcontext_total": 16212,
+ "asset_versions_total": 7792,
+ "versions_by_status_id": {
+  "2df9b80e-c762-4584-a6d1-d3a352ad2b6b": 2750,
+  "64aa7185-3bba-4b41-b9d6-2ccde7900de3": 516,
+  "ad305f7e-a600-40a2-a496-838cbf61d738": 1108,
+  "cadb9a06-acb5-11e1-8668-f23c91df1211": 559,
+  "23457205-c493-44d4-a21b-a6e07d7a4be9": 2421,
+  "15ec47a6-f322-4506-ac91-4cfec091dd63": 210,
+  "079bbe26-e452-4918-9db8-f397803a4e52": 66,
+  "74b46a19-b036-4b2e-ac47-65c6d426bcbe": 85,
+  "44ddd0fe-4164-11df-9218-0019bb4983d8": 37,
+  "b613ca58-ac71-40e0-a1cf-d972fdc31166": 38,
+  "44dded64-4164-11df-9218-0019bb4983d8": 2
+ },
+ "versions_published": 7792,
+ "versions_with_task": 7734,
+ "assets_total": "ERR No attribute 'parent_id exists for schema 'Asset'.",
+ "notes_total": 16476,
+ "notes_by_parent_type": {
+  "TypedContext": 12954,
+  "AssetVersion": 3398,
+  "ReviewSessionObject": 94,
+  "null": 28,
+  "Project": 2
+ },
+ "notes_replies": 1047,
+ "notes_by_category": {
+  "7fab3b2c-e471-4dd5-b7e5-d91d454b1273": 5958,
+  "9ab1b1eb-6eb7-46c3-9d14-871b6b12af42": 1109,
+  "42983ba0-53b0-11e4-916c-0800200c9a66": 669,
+  "f9115d4d-16ef-43ec-a29e-00d8e8847e97": 5830,
+  "252b0e8e-78da-11e1-aece-0019bb4983d8": 430,
+  "null": 201,
+  "9ca3df46-c381-404d-9c15-cf0345db7c9a": 1020,
+  "f115299a-f072-4eba-b5ff-edc6a1bed2cc": 676,
+  "b616508b-e385-4730-9a87-8255745bbe23": 181,
+  "512a0282-1d8d-4150-ba9d-515d801a8a8b": 244,
+  "e641dda8-b49e-4b62-8d3b-288ea62234c7": 129,
+  "446f507e-3bbb-452e-a255-aa4a0c99e1e6": 15,
+  "fb4ddcd5-e34e-4c71-b345-89647d09aa57": 2,
+  "566aa56f-50ab-45ac-9be9-7f7475754743": 12
+ },
+ "review_sessions_total": 2,
+ "review_session_objects_total": 7,
+ "timelogs_total": 2,
+ "appointments_total": 9463,
+ "appointments_by_type": {
+  "assignment": 9463
+ },
+ "milestones_total": 630,
+ "milestones_by_status_id": {
+  "ff76802d-d503-4e9b-9db8-d36aa21b5325": 487,
+  "9bb65936-88e7-11e3-9264-04011030cf01": 119,
+  "68f9f5bb-4e2c-4a3e-b551-c02933cca62f": 24
+ },
+ "lists_total": 3,
+ "lists_names": [
+  [
+   "default",
+   "Delivery"
+  ],
+  [
+   "versions",
+   null
+  ],
+  [
+   "objects",
+   null
+  ]
+ ],
+ "components_total": 30047,
+ "components_by_file_type": [
+  [
+   ".jpg",
+   9696
+  ],
+  [
+   ".mp4",
+   8667
+  ],
+  [
+   ".png",
+   6895
+  ],
+  [
+   "jpg",
+   3161
+  ],
+  [
+   ".mov",
+   1085
+  ],
+  [
+   ".xls",
+   162
+  ],
+  [
+   ".PNG",
+   125
+  ],
+  [
+   ".pdf",
+   61
+  ],
+  [
+   ".jpeg",
+   60
+  ],
+  [
+   ".JPG",
+   33
+  ],
+  [
+   "",
+   23
+  ],
+  [
+   ".exr",
+   23
+  ],
+  [
+   ".webp",
+   16
+  ],
+  [
+   ".csv",
+   13
+  ],
+  [
+   ".gif",
+   12
+  ]
+ ],
+ "calendar_events_total": 2108,
+ "user_views_total": "ERR No attribute 'entity_type exists for schema 'UserView'.",
+ "dashboards_total": 21,
+ "jobs_total": 8008,
+ "jobs_by_status": {
+  "done": 7993,
+  "failed": 15
+ },
+ "status_changes_task_total": "ERR No attribute 'from_id exists for schema 'TypedContextStatusChange'.",
+ "status_changes_version_total": "ERR No attribute 'from_id exists for schema 'AssetVersionStatusChange'.",
+ "split_task_parts_total": 0,
+ "metadata_total": "ERR No attribute 'id exists for schema 'Metadata'.",
+ "typedcontext_links_total": 21,
+ "assetversion_links_total": 0,
+ "automations_total": 0,
+ "triggers_total": 0,
+ "webhooks_total": 0,
+ "feeds_total": "ERR HTTP Error 502: Bad Gateway"
+}

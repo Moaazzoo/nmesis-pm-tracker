@@ -1,0 +1,6 @@
+.env.local
+node_modules
+.next
+data/seed/*.json
+!data/seed/fixture.json
+.DS_Store

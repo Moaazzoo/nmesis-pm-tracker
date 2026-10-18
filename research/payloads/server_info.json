@@ -1,0 +1,19 @@
+{
+ "version": "24.6.19-7a150b49b8d315826f91fb4184ae529c74dd3717",
+ "schema_hash": "788af1615984c8cae16a25e5301df3f0",
+ "storage_scenario": {
+  "scenario": "ftrack.centralized-storage",
+  "data": {
+   "location_id": "ec78d926-42e9-4710-abb1-afd8eb24ac36",
+   "location_name": "Nmesis.central-storage-location",
+   "accessor": {
+    "mount_points": {
+     "linux": "",
+     "osx": "",
+     "windows": "\\\\192.168.1.178\\Store\\Submissions\\Ftrack"
+    }
+   }
+  }
+ },
+ "is_timezone_support_enabled": true
+}

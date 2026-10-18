@@ -1,0 +1,1448 @@
+[
+ {
+  "tid": "request-4",
+  "step": 0,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select color, id, name, sort, state.short\n            from Status\n            \n            order by sort desc, id\n            \n            limit 1000"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [
+     {
+      "__entity_type__": "Status",
+      "id": "44dd9fb2-4164-11df-9218-0019bb4983d8",
+      "color": "#727272",
+      "name": "Waiting for another progress",
+      "sort": 27,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0ba04-acb5-11e1-8668-f23c91df1211",
+       "short": "NOT_STARTED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "9078de1a-40ce-11ed-a028-8e70b81a65da",
+      "color": "#CCFFFF",
+      "name": "Ready to start",
+      "sort": 26,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0ba04-acb5-11e1-8668-f23c91df1211",
+       "short": "NOT_STARTED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "44ddd0fe-4164-11df-9218-0019bb4983d8",
+      "color": "#5c53df",
+      "name": "In Progress",
+      "sort": 25,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "a0bc2444-15e2-11e1-b21a-0019bb4983d8",
+      "color": "#5F4614",
+      "name": "On Hold",
+      "sort": 24,
+      "state": {
+       "__entity_type__": "State",
+       "id": "5709c04e-2f4b-11e2-b663-0019bb4983d8",
+       "short": "BLOCKED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "44dded64-4164-11df-9218-0019bb4983d8",
+      "color": "#ccbb3c",
+      "name": "Pending Review",
+      "sort": 23,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "2286947e-a2d4-11e9-825d-d27cf242b68b",
+      "color": "#550000",
+      "name": "Comments",
+      "sort": 22,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "30e38d36-ff3c-457a-be1e-4e858f2afc62",
+      "color": "#2087a4",
+      "name": "Ready to Resume",
+      "sort": 21,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "b89bdbfe-c87a-4f19-a6ff-7fb71c85ad15",
+      "color": "#d55000",
+      "name": "Pending VFX Sup Feedback",
+      "sort": 20,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "48daa8ae-c023-4439-8925-13b00402f5dd",
+      "color": "#ffe4a0",
+      "name": "Pending Department Sup Feedback",
+      "sort": 19,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "0ebd0d08-30ca-4899-80b1-b7fc8da10557",
+      "color": "#ff007f",
+      "name": "Rendering",
+      "sort": 18,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "44de097a-4164-11df-9218-0019bb4983d8",
+      "color": "#339966",
+      "name": "Sup Approved",
+      "sort": 17,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea116d4-acb5-11e1-8668-f23c91df1211",
+       "short": "DONE"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "35b6a066-c14e-4c79-9131-f15f606db9d3",
+      "color": "#5f5f5f",
+      "name": "Awaiting another task",
+      "sort": 16,
+      "state": {
+       "__entity_type__": "State",
+       "id": "5709c04e-2f4b-11e2-b663-0019bb4983d8",
+       "short": "BLOCKED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "128f0584-ec7f-4a64-adcf-82b655a6b4eb",
+      "color": "#ffc8ff",
+      "name": "Awaiting Export",
+      "sort": 15,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "3d26eb13-d6bb-4fe2-a131-caba7138d25e",
+      "color": "#0b0b11",
+      "name": "Awaiting 1st Pass",
+      "sort": 14,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0ba04-acb5-11e1-8668-f23c91df1211",
+       "short": "NOT_STARTED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "a8629d12-75e6-4c33-a61b-c08a869eb2c5",
+      "color": "#001200",
+      "name": "Cancelled",
+      "sort": 13,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea116d4-acb5-11e1-8668-f23c91df1211",
+       "short": "DONE"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "9bb65936-88e7-11e3-9264-04011030cf01",
+      "color": "#31ac31",
+      "name": "Completed",
+      "sort": 12,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea116d4-acb5-11e1-8668-f23c91df1211",
+       "short": "DONE"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "ff76802d-d503-4e9b-9db8-d36aa21b5325",
+      "color": "#33CCCC",
+      "name": "Milestone",
+      "sort": 11,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0ba04-acb5-11e1-8668-f23c91df1211",
+       "short": "NOT_STARTED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "68f9f5bb-4e2c-4a3e-b551-c02933cca62f",
+      "color": "#993366",
+      "name": "Final",
+      "sort": 10,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea116d4-acb5-11e1-8668-f23c91df1211",
+       "short": "DONE"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "cadb9a06-acb5-11e1-8668-f23c91df1211",
+      "color": "#CC99FF",
+      "name": "WIP",
+      "sort": 9,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "23457205-c493-44d4-a21b-a6e07d7a4be9",
+      "color": "#99CCFF",
+      "name": "Seen",
+      "sort": 8,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "b613ca58-ac71-40e0-a1cf-d972fdc31166",
+      "color": "#3366FF",
+      "name": "Dept Approved",
+      "sort": 6,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "64aa7185-3bba-4b41-b9d6-2ccde7900de3",
+      "color": "#12824a",
+      "name": "CG Sup Approved",
+      "sort": 5,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "ad305f7e-a600-40a2-a496-838cbf61d738",
+      "color": "#1ab568",
+      "name": "VFX Sup Approved",
+      "sort": 4,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "2df9b80e-c762-4584-a6d1-d3a352ad2b6b",
+      "color": "#008000",
+      "name": "Approved",
+      "sort": 3,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea116d4-acb5-11e1-8668-f23c91df1211",
+       "short": "DONE"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "15ec47a6-f322-4506-ac91-4cfec091dd63",
+      "color": "#2fc62f",
+      "name": "Client Approved",
+      "sort": 2,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea116d4-acb5-11e1-8668-f23c91df1211",
+       "short": "DONE"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "74b46a19-b036-4b2e-ac47-65c6d426bcbe",
+      "color": "#1b2023",
+      "name": "Not Ready For Review",
+      "sort": 1,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0efc4-acb5-11e1-8668-f23c91df1211",
+       "short": "IN_PROGRESS"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "079bbe26-e452-4918-9db8-f397803a4e52",
+      "color": "#C0C0C0",
+      "name": "Reference",
+      "sort": 0,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0ba04-acb5-11e1-8668-f23c91df1211",
+       "short": "NOT_STARTED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "375d7b72-95e3-4ca9-a1a7-c472ad8b8fb8",
+      "color": "#FFFFFF",
+      "name": "Pending Client Feedback ",
+      "sort": 0,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0ba04-acb5-11e1-8668-f23c91df1211",
+       "short": "NOT_STARTED"
+      }
+     },
+     {
+      "__entity_type__": "Status",
+      "id": "4a1e588f-4898-4819-953c-94fb0ab350c5",
+      "color": "#333333",
+      "name": "Pushed",
+      "sort": 0,
+      "state": {
+       "__entity_type__": "State",
+       "id": "cea0ba04-acb5-11e1-8668-f23c91df1211",
+       "short": "NOT_STARTED"
+      }
+     }
+    ],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-5",
+  "step": 0,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select name, value\n            from Setting\n            where group is \"TIME\"\n            order by name, group\n            \n            limit 25"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [
+     {
+      "__entity_type__": "Setting",
+      "name": "display_as_days",
+      "group": "TIME",
+      "value": "1"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "display_week_numbers",
+      "group": "TIME",
+      "value": "1"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "week_startday",
+      "group": "TIME",
+      "value": "0"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "workday_length",
+      "group": "TIME",
+      "value": "28800"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "workweek",
+      "group": "TIME",
+      "value": "[1, 2, 3, 4, 0]"
+     }
+    ],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-6",
+  "step": 1,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select ancestors.status.state.short, assignments.resource.first_name, assignments.resource.last_name, assignments.resource.thumbnail_url, bid, end_date, id, link, name, object_type.icon, object_type.name, project.color, project_id, split_parts.end_date, split_parts.label, split_parts.start_date, start_date, status.color, status.name, status.state.name, status.state.short, type, type.color, type.name\n            from TypedContext\n            where assignments.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\" and project.status is active and ((end_date >= \"2025-12-22T22:00:00.000Z\" and start_date <= \"2027-08-25T21:00:00.000Z\") or (start_date is none and end_date <= \"2027-08-25T21:00:00.000Z\" and end_date >= \"2025-12-22T22:00:00.000Z\"))\n            order by id\n            \n            limit 1000"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-7",
+  "step": 1,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select calendar_event_resources.resource.first_name, calendar_event_resources.resource.last_name, calendar_event_resources.resource.thumbnail_url, effort, end, estimate, everyone, forecast, id, leave, name, project.color, project.full_name, project_id, start, type.color, type.name\n            from CalendarEvent\n            where (everyone is True or calendar_event_resources.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\") and (project.status is \"active\" or leave is true or project is None) and (end >= \"2025-12-22T22:00:00.000Z\" and start <= \"2027-08-25T21:00:00.000Z\")\n            order by id\n            \n            limit 1000"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "0f3d6544-2764-423b-a8c2-f33ca8e2fe11",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-07-24T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Holiday 23July",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-07-23T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "1dd55556-62ad-43c7-a0e1-240fb2c51dc4",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-02-20T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Ramadan Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-02-18T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "55aaddbe-41ff-4cc8-8005-b05e00a60dad",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-04-14T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Townhall Meeting",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-04-13T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "59434872-40ba-40c5-a1c1-5df2753934f6",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-07-03T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-07-02T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "6d1aa425-8bcd-4659-abba-7e2b3808d698",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-02T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "End of Year Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2025-12-31T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "77c1fe06-d605-428a-989c-65406299f329",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "95931b99-c7da-47c6-87a9-c86cc9e406a1",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-07-01T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Emergency Leave (Moaaz)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-06-30T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "8455798b-2a88-4da4-9769-aadb8b673dc0",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2027-01-01T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Annual Leave (Maybe)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-12-20T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "9d5fbc4e-2507-4734-9083-f948ff8b9499",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-05-29T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Eid Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-05-24T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "ba51ba0f-0253-4b75-b2b3-db0fa0f80153",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "b2176293-b2a2-4027-8646-39810b1c16c3",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-19T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Annual Leave (Teodora)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-01-13T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "c4c033ee-5b9e-4641-bace-84841caebac7",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-09T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Holiday",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-01-08T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "c5e3b195-355a-40cc-a40b-f13e3d8eb890",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-03-23T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Eid Vacation ",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-03-19T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "d1603537-8806-4fcf-94ba-d737ec730823",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-08-28T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Holiday",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-08-27T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "ddbad702-a6e2-4bff-8a0a-f045a129a6d4",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "ad4b9dba-e893-4c6d-9228-e0cb54697b3a",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-30T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Vacation (Teodora)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-01-29T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "e02a65ed-f5b6-4b83-891b-db5a3118bd23",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "f806555e-e834-48fc-8c95-f143c1571267",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-01T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Annual Leave (Omar Wanis)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2025-12-29T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "ff15a26b-e5ef-42bc-9a36-a99e2f8682a8",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-06-26T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Islamic New Year",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-06-25T00:00:00"
+      },
+      "type": null
+     }
+    ],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-8",
+  "step": 1,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select color, end_date, full_name, id, start_date, thumbnail_url\n            from Project\n            where status is 'active' and (id in (select project_id from CalendarEvent where (everyone is True or calendar_event_resources.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\") and (project.status is \"active\" or leave is true or project is None) and (end >= \"2025-12-22T22:00:00.000Z\" and start <= \"2027-08-25T21:00:00.000Z\")) or id in (select project_id from TypedContext where assignments.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\" and ((end_date >= \"2025-12-22T22:00:00.000Z\" and start_date <= \"2027-08-25T21:00:00.000Z\") or (start_date is none and end_date <= \"2027-08-25T21:00:00.000Z\" and end_date >= \"2025-12-22T22:00:00.000Z\"))))\n            order by id\n            \n            limit 1000"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-9",
+  "step": 1,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select count(id)\n            from Task\n            where assignments.resource_id is bcdf57b0-acc6-11e1-a554-f23c91df1211 and (not ancestors.id in (select id from TypedContext where status_id in (\"a0bc2444-15e2-11e1-b21a-0019bb4983d8\",\"35b6a066-c14e-4c79-9131-f15f606db9d3\"))) and project.status is \"active\" group by status_id\n            order by id\n            \n            limit 25"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-13",
+  "step": 2,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select name, value\n            from Setting\n            where group is \"TIME\"\n            order by name, group\n            \n            limit 25"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [
+     {
+      "__entity_type__": "Setting",
+      "name": "display_as_days",
+      "group": "TIME",
+      "value": "1"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "display_week_numbers",
+      "group": "TIME",
+      "value": "1"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "week_startday",
+      "group": "TIME",
+      "value": "0"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "workday_length",
+      "group": "TIME",
+      "value": "28800"
+     },
+     {
+      "__entity_type__": "Setting",
+      "name": "workweek",
+      "group": "TIME",
+      "value": "[1, 2, 3, 4, 0]"
+     }
+    ],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-14",
+  "step": 2,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select ancestors.status.state.short, assignments.resource.first_name, assignments.resource.last_name, assignments.resource.thumbnail_url, bid, end_date, id, link, name, object_type.icon, object_type.name, project.color, project_id, split_parts.end_date, split_parts.label, split_parts.start_date, start_date, status.color, status.name, status.state.name, status.state.short, type, type.color, type.name\n            from TypedContext\n            where assignments.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\" and project.status is active and ((end_date >= \"2025-12-22T22:00:00.000Z\" and start_date <= \"2027-08-25T21:00:00.000Z\") or (start_date is none and end_date <= \"2027-08-25T21:00:00.000Z\" and end_date >= \"2025-12-22T22:00:00.000Z\"))\n            order by id\n            \n            limit 1000"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-15",
+  "step": 2,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select calendar_event_resources.resource.first_name, calendar_event_resources.resource.last_name, calendar_event_resources.resource.thumbnail_url, effort, end, estimate, everyone, forecast, id, leave, name, project.color, project.full_name, project_id, start, type.color, type.name\n            from CalendarEvent\n            where (everyone is True or calendar_event_resources.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\") and (project.status is \"active\" or leave is true or project is None) and (end >= \"2025-12-22T22:00:00.000Z\" and start <= \"2027-08-25T21:00:00.000Z\")\n            order by id\n            \n            limit 1000"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "0f3d6544-2764-423b-a8c2-f33ca8e2fe11",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-07-24T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Holiday 23July",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-07-23T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "1dd55556-62ad-43c7-a0e1-240fb2c51dc4",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-02-20T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Ramadan Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-02-18T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "55aaddbe-41ff-4cc8-8005-b05e00a60dad",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-04-14T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Townhall Meeting",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-04-13T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "59434872-40ba-40c5-a1c1-5df2753934f6",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-07-03T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-07-02T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "6d1aa425-8bcd-4659-abba-7e2b3808d698",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-02T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "End of Year Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2025-12-31T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "77c1fe06-d605-428a-989c-65406299f329",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "95931b99-c7da-47c6-87a9-c86cc9e406a1",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-07-01T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Emergency Leave (Moaaz)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-06-30T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "8455798b-2a88-4da4-9769-aadb8b673dc0",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2027-01-01T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Annual Leave (Maybe)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-12-20T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "9d5fbc4e-2507-4734-9083-f948ff8b9499",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-05-29T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Eid Vacation",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-05-24T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "ba51ba0f-0253-4b75-b2b3-db0fa0f80153",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "b2176293-b2a2-4027-8646-39810b1c16c3",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-19T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Annual Leave (Teodora)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-01-13T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "c4c033ee-5b9e-4641-bace-84841caebac7",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-09T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Holiday",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-01-08T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "c5e3b195-355a-40cc-a40b-f13e3d8eb890",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-03-23T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Eid Vacation ",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-03-19T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "d1603537-8806-4fcf-94ba-d737ec730823",
+      "calendar_event_resources": [],
+      "effort": 28800.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-08-28T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Holiday",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-08-27T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "ddbad702-a6e2-4bff-8a0a-f045a129a6d4",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "ad4b9dba-e893-4c6d-9228-e0cb54697b3a",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-30T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Public Vacation (Teodora)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-01-29T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "e02a65ed-f5b6-4b83-891b-db5a3118bd23",
+      "calendar_event_resources": [
+       {
+        "__entity_type__": "CalendarEventResource",
+        "id": "f806555e-e834-48fc-8c95-f143c1571267",
+        "resource": {
+         "__entity_type__": "User",
+         "id": "bcdf57b0-acc6-11e1-a554-f23c91df1211",
+         "first_name": "Production",
+         "last_name": "Team",
+         "thumbnail_url": {
+          "value": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png",
+          "url": "https://cdn-eu1.ftrackapp.com/thumbor/bPFLzQEO3Pvl0NoTPDjiAwQhCnk=/fit-in/300x300/https%3A//nmesismotionlab.ftrackapp.com/img/thumbnail2.png"
+         }
+        }
+       }
+      ],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-01-01T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": false,
+      "forecast": true,
+      "leave": true,
+      "name": "Annual Leave (Omar Wanis)",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2025-12-29T00:00:00"
+      },
+      "type": null
+     },
+     {
+      "__entity_type__": "CalendarEvent",
+      "id": "ff15a26b-e5ef-42bc-9a36-a99e2f8682a8",
+      "calendar_event_resources": [],
+      "effort": 0.0,
+      "end": {
+       "__type__": "datetime",
+       "value": "2026-06-26T00:00:00"
+      },
+      "estimate": 0.0,
+      "everyone": true,
+      "forecast": true,
+      "leave": true,
+      "name": "Islamic New Year",
+      "project": null,
+      "project_id": null,
+      "start": {
+       "__type__": "datetime",
+       "value": "2026-06-25T00:00:00"
+      },
+      "type": null
+     }
+    ],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-16",
+  "step": 2,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select color, end_date, full_name, id, start_date, thumbnail_url\n            from Project\n            where status is 'active' and (id in (select project_id from CalendarEvent where (everyone is True or calendar_event_resources.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\") and (project.status is \"active\" or leave is true or project is None) and (end >= \"2025-12-22T22:00:00.000Z\" and start <= \"2027-08-25T21:00:00.000Z\")) or id in (select project_id from TypedContext where assignments.resource_id is \"bcdf57b0-acc6-11e1-a554-f23c91df1211\" and ((end_date >= \"2025-12-22T22:00:00.000Z\" and start_date <= \"2027-08-25T21:00:00.000Z\") or (start_date is none and end_date <= \"2027-08-25T21:00:00.000Z\" and end_date >= \"2025-12-22T22:00:00.000Z\"))))\n            order by id\n            \n            limit 1000"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ },
+ {
+  "tid": "request-17",
+  "step": 2,
+  "url": "https://nmesismotionlab.ftrackapp.com/api",
+  "status": 200,
+  "request": [
+   {
+    "action": "query",
+    "expression": "select count(id)\n            from Task\n            where assignments.resource_id is bcdf57b0-acc6-11e1-a554-f23c91df1211 and (not ancestors.id in (select id from TypedContext where status_id in (\"a0bc2444-15e2-11e1-b21a-0019bb4983d8\",\"35b6a066-c14e-4c79-9131-f15f606db9d3\"))) and project.status is \"active\" group by status_id\n            order by id\n            \n            limit 25"
+   }
+  ],
+  "response": [
+   {
+    "action": "query",
+    "data": [],
+    "metadata": {
+     "next": {
+      "offset": null
+     }
+    }
+   }
+  ]
+ }
+]
