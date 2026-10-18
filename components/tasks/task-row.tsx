@@ -16,7 +16,7 @@ const STATUS_TIP: Record<string, string> = {
 };
 
 /** One task line inside a unit. `href` opens the task drawer (added in Task 10); controls arrive in Task 9. */
-export function TaskRow({ t, href, controls }: { t: TaskRowT; href: string; controls?: React.ReactNode }) {
+export function TaskRow({ t, href, controls, assigneeCell, dueCell }: { t: TaskRowT; href: string; controls?: React.ReactNode; assigneeCell?: React.ReactNode; dueCell?: React.ReactNode }) {
   const st = STATUS_BY_KEY[t.status_key as StatusKey];
   const due = fmtDay(t.due_date);
   const dueClass = t.risk === "overdue" ? "text-red" : t.risk === "at_risk" ? "text-amber" : "text-muted";
@@ -28,14 +28,14 @@ export function TaskRow({ t, href, controls }: { t: TaskRowT; href: string; cont
       </div>
       <span className="truncate text-[12px] text-muted">{t.type_name ?? <span className="text-faint">No type</span>}</span>
       <div>{controls ?? (st ? <Chip tone={st.tone} label={st.name} tip={STATUS_TIP[st.key]} /> : <Chip tone="muted" label={String(t.status_key)} />)}</div>
-      <div className="flex min-w-0 items-center gap-1.5">
+      {assigneeCell ?? <div className="flex min-w-0 items-center gap-1.5">
         {t.assignees.length === 0
           ? <span className="text-[12px] text-faint">Unassigned</span>
           : t.assignees.map((a) => <span key={a.id} className="flex items-center gap-1.5"><Avatar name={a.full_name} size={20} /><span className="truncate text-[12px]">{a.full_name}</span></span>)}
-      </div>
-      <span className={`tnum text-[12px] ${dueClass}`} data-tip={t.risk === "overdue" ? "Past due and not completed" : t.risk === "at_risk" ? "Due soon and not started, or stuck in review" : due ? "Due date" : "No due date set"}>
+      </div>}
+      {dueCell ?? <span className={`tnum text-[12px] ${dueClass}`} data-tip={t.risk === "overdue" ? "Past due and not completed" : t.risk === "at_risk" ? "Due soon and not started, or stuck in review" : due ? "Due date" : "No due date set"}>
         {due ?? <span className="text-faint">No due date</span>}
-      </span>
+      </span>}
       <span className="tnum text-[12px] text-muted" data-tip={`${t.note_count} note${t.note_count === 1 ? "" : "s"}`}>{t.note_count > 0 ? `${t.note_count} ✎` : ""}</span>
       <span className="tnum text-[12px] text-muted" data-tip={t.latest_version ? `Latest version ${t.latest_version}` : "No version submitted yet"}>{t.latest_version ? `v${t.latest_version}` : "—"}</span>
     </div>

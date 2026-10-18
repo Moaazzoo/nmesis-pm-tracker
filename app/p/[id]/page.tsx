@@ -10,6 +10,7 @@ import { Filters } from "@/components/project/filters";
 import { UnitRows } from "@/components/project/unit-rows";
 import { requirePerson } from "@/lib/auth";
 import { loadBoard, loadProject } from "@/lib/queries/project-board";
+import { listAssignablePeople } from "@/lib/queries/people";
 import type { State } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +25,7 @@ export default async function ProjectBoard({ params, searchParams }: { params: P
   if (!project) notFound();
   const board = await loadBoard(id, { states: sp.state ? [sp.state as State] : undefined, type: sp.type || undefined, person: sp.person || undefined, q: sp.q || undefined });
   const filtered = !!(sp.state || sp.type || sp.person || sp.q);
+  const allPeople = await listAssignablePeople();
   return (
     <>
       <TopBar crumb={[{ label: "Projects", href: "/" }, { label: project.name }]} right={<UserMenu person={person} />} />
@@ -53,7 +55,7 @@ export default async function ProjectBoard({ params, searchParams }: { params: P
           <main>
             {board.units.length === 0
               ? <Empty title={filtered ? "No tasks match these filters" : "No tasks in this project yet"} hint={filtered ? "Clear the filters to see everything." : "Production adds units and tasks from Setup, or imports them from ftrack."} />
-              : <UnitRows units={board.units} projectId={id} />}
+              : <UnitRows units={board.units} projectId={id} person={person} people={allPeople} />}
           </main>
         </div>
       </Page>
