@@ -15,7 +15,14 @@ export function TopBar({ crumb = [], right }: { crumb?: { label: string; href?: 
             </span>
           ))}
         </nav>
-        <div className="ml-auto flex items-center gap-3">{right}</div>
+        <div className="ml-auto flex items-center gap-3">
+          <nav className="hidden items-center gap-1 text-[12px] md:flex" aria-label="Main">
+            <Link href="/" className="rounded-full px-2.5 py-1 text-muted hover:text-ink">Projects</Link>
+            <Link href="/me" className="rounded-full px-2.5 py-1 text-muted hover:text-ink">My Queue</Link>
+            <Link href="/review" className="rounded-full px-2.5 py-1 text-muted hover:text-ink">Review</Link>
+          </nav>
+          {right}
+        </div>
       </div>
     </header>
   );
