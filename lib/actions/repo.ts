@@ -1,9 +1,11 @@
 import "server-only";
 import { adminClient } from "@/lib/supabase/admin";
 import type { FieldRepo, TaskRepo } from "./tasks-core";
+import type { DrawerRepo } from "./drawer-core";
+import type { Discipline } from "@/lib/types";
 
 /** Supabase-backed repository used by every server action. Service role; permissions are checked in the cores. */
-export function supabaseRepo(): TaskRepo & FieldRepo {
+export function supabaseRepo(): TaskRepo & FieldRepo & DrawerRepo {
   const db = adminClient();
   return {
     async getTask(id) {
@@ -19,17 +21,32 @@ export function supabaseRepo(): TaskRepo & FieldRepo {
       const { error } = await db.from("tk_status_log").insert({ task_id: r.taskId, from_status_key: r.from, to_status_key: r.to, by_person_id: r.by, at: r.at.toISOString() });
       if (error) throw new Error(error.message);
     },
-    async insertNote(n) {
-      const { data, error } = await db.from("tk_notes").insert({ task_id: n.taskId, author_id: n.authorId, category: n.category, body: n.body }).select("id").single();
+    async insertNote(n: { taskId: string; versionId?: string | null; authorId: string; category: string; body: string; replyTo?: string | null }) {
+      const { data, error } = await db.from("tk_notes").insert({ task_id: n.taskId, version_id: n.versionId ?? null, author_id: n.authorId, category: n.category, body: n.body, reply_to_id: n.replyTo ?? null }).select("id").single();
       if (error) throw new Error(error.message);
       return (data as { id: string }).id;
+    },
+    async maxVersionNumber(taskId) {
+      const { data } = await db.from("tk_versions").select("number").eq("task_id", taskId).order("number", { ascending: false }).limit(1);
+      return data?.[0]?.number ?? 0;
+    },
+    async insertVersion(v) {
+      const { data, error } = await db.from("tk_versions").insert({ task_id: v.taskId, number: v.number, submitted_by: v.submittedBy, link: v.link, note: v.note, status: "submitted", source: "app" }).select("id").single();
+      if (error) throw new Error(error.message);
+      return (data as { id: string }).id;
+    },
+    async taskDiscipline(taskId) {
+      const { data } = await db.from("tk_tasks").select("type:tk_task_types(discipline)").eq("id", taskId).maybeSingle();
+      return ((data?.type as unknown as { discipline: Discipline | null } | null)?.discipline) ?? null;
     },
     async insertActivity(a) {
       const { error } = await db.from("tk_activity").insert({ project_id: a.projectId, task_id: a.taskId, actor_id: a.actorId, action: a.action, payload: a.payload, unread_by: a.notify });
       if (error) throw new Error(error.message);
     },
-    async listSupervisors() {
-      const { data } = await db.from("tk_people").select("id").eq("role", "supervisor").eq("active", true);
+    async listSupervisors(discipline: Discipline | null = null) {
+      let q = db.from("tk_people").select("id").eq("role", "supervisor").eq("active", true);
+      if (discipline) q = q.eq("discipline", discipline);
+      const { data } = await q;
       return (data ?? []).map((p) => p.id);
     },
     async setAssignees(taskId, personIds) {

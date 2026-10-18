@@ -12,10 +12,11 @@ import { requirePerson } from "@/lib/auth";
 import { loadBoard, loadProject } from "@/lib/queries/project-board";
 import { listAssignablePeople } from "@/lib/queries/people";
 import type { State } from "@/lib/types";
+import { TaskDrawer } from "@/components/tasks/task-drawer";
 
 export const dynamic = "force-dynamic";
 
-type Search = { state?: string; type?: string; person?: string; q?: string; task?: string };
+type Search = { state?: string; type?: string; person?: string; q?: string; task?: string; tab?: string };
 
 export default async function ProjectBoard({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<Search> }) {
   const person = await requirePerson();
@@ -26,6 +27,8 @@ export default async function ProjectBoard({ params, searchParams }: { params: P
   const board = await loadBoard(id, { states: sp.state ? [sp.state as State] : undefined, type: sp.type || undefined, person: sp.person || undefined, q: sp.q || undefined });
   const filtered = !!(sp.state || sp.type || sp.person || sp.q);
   const allPeople = await listAssignablePeople();
+  const qs = new URLSearchParams(Object.entries({ state: sp.state, type: sp.type, person: sp.person, q: sp.q }).filter((e): e is [string, string] => !!e[1]));
+  const baseQuery = qs.toString() ? `?${qs}` : "";
   return (
     <>
       <TopBar crumb={[{ label: "Projects", href: "/" }, { label: project.name }]} right={<UserMenu person={person} />} />
@@ -59,6 +62,7 @@ export default async function ProjectBoard({ params, searchParams }: { params: P
           </main>
         </div>
       </Page>
+      {sp.task && <TaskDrawer taskId={sp.task} person={person} base={`/p/${id}${baseQuery}`} tab={sp.tab} />}
     </>
   );
 }
