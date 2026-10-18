@@ -39,7 +39,7 @@ export default async function ProjectBoard({ params, searchParams }: { params: P
             <p className="font-label text-[11px] font-bold tracking-[.22em] text-green">{project.client ?? project.code}</p>
             <h1 className="mt-1 font-display text-[30px] font-light tracking-[-.02em]">{project.name}</h1>
           </div>
-          <div className="flex flex-wrap items-center gap-3"><SummaryStrip s={board.summary} /><nav className="flex items-center gap-1 rounded-full border border-line p-1 text-[12px]"><span className="rounded-full bg-[rgba(169,227,75,.12)] px-3 py-1 text-green">Board</span><Link href={`/p/${id}/timeline`} className="rounded-full px-3 py-1 text-muted hover:text-ink">Timeline</Link><Link href={`/p/${id}/board`} className="rounded-full px-3 py-1 text-muted hover:text-ink">Kanban</Link></nav></div>
+          <div className="flex flex-wrap items-center gap-3"><SummaryStrip s={board.summary} /><nav className="flex items-center gap-1 rounded-full border border-line p-1 text-[12px]"><span className="rounded-full bg-[rgba(169,227,75,.12)] px-3 py-1 text-green">Board</span><Link href={`/p/${id}/timeline`} className="rounded-full px-3 py-1 text-muted hover:text-ink">Timeline</Link><Link href={`/p/${id}/board`} className="rounded-full px-3 py-1 text-muted hover:text-ink">Kanban</Link><Link href={`/p/${id}/setup`} className="rounded-full px-3 py-1 text-muted hover:text-ink">Setup</Link></nav></div>
         </div>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <Filters current={sp} people={board.people} types={board.types} />
