@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* NMESIS UI Kit — app tier tokens (ported 1:1 from nmesis-platform). */
+:root {
+  --bg: #060706;
+  --bg2: #0b0d0a;
+  --panel: #101310;
+  --panel2: #151813;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --ink: #f3f6f7;
+  --muted: #9aa5ad;
+  --faint: #616b73;
+  --green: #a9e34b;
+  --red: #ff5a5f;
+  --amber: #e6ad00; /* at-risk only */
+  --track: rgba(255, 255, 255, 0.08);
+  --radius: 16px;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg2);
+  --color-panel: var(--panel);
+  --color-panel2: var(--panel2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-green: var(--green);
+  --color-red: var(--red);
+  --color-amber: var(--amber);
+  --font-display: var(--font-cera);
+  --font-body: var(--font-cera);
+  --font-label: var(--font-arquitecta);
+}
+
+* { box-sizing: border-box; }
+
+html { overflow-x: hidden; overflow-x: clip; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-cera), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-synthesis: weight;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+.font-label {
+  font-family: var(--font-arquitecta), var(--font-cera), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Hover explanation for any element with data-tip (every chip and marker carries one). */
+[data-tip] { position: relative; }
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 0;
+  top: calc(100% + 6px);
+  z-index: 60;
+  white-space: pre-line;
+  min-width: 160px;
+  max-width: 320px;
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--panel2);
+  color: var(--ink);
+  font-family: var(--font-cera), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.risk-pulse { animation: tk-pulse 2.2s ease-in-out infinite; }
+@keyframes tk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .risk-pulse { animation: none; } }
