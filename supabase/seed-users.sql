@@ -77,3 +77,19 @@ where not exists (select 1 from upd where upd.pid = j.pid);
 select p.full_name, p.role, p.discipline, p.is_admin, pr.username
 from tk_people p join profiles pr on pr.id = p.profile_id
 order by p.full_name;
+
+-- ============================================================================
+-- REPAIR (run if sign-in says "don't match"): users created without an email
+-- identity cannot sign in. Adds the identity and (re)sets the password.
+-- Replace CHANGE_ME, then run this block followed by blocks 2–4 above.
+-- ============================================================================
+-- insert into auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+-- select gen_random_uuid(), u.id, u.id::text, 'email',
+--        jsonb_build_object('sub', u.id::text, 'email', u.email, 'email_verified', true, 'phone_verified', false), now(), now(), now()
+-- from auth.users u
+-- where u.email in ('moaaz.hashem@nmesis.io','teodora.khalifa@nmesis.io','kareem@nmesis.io','hesham@nmesis.io')
+--   and not exists (select 1 from auth.identities i where i.user_id = u.id);
+-- update auth.users
+--    set encrypted_password = extensions.crypt('CHANGE_ME', extensions.gen_salt('bf')),
+--        email_confirmed_at = coalesce(email_confirmed_at, now()), updated_at = now()
+--  where email in ('moaaz.hashem@nmesis.io','teodora.khalifa@nmesis.io','kareem@nmesis.io','hesham@nmesis.io');
