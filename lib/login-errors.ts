@@ -10,3 +10,10 @@ export function loginErrorCode(message: string): LoginErrorCode {
   if (m.includes("rate limit") || m.includes("too many")) return "rate";
   return "other";
 }
+
+/** Where to send the browser after a failed sign-in. Unknown failures carry the service's message so it can be shown. */
+export function loginFailurePath(message: string): string {
+  const code = loginErrorCode(message);
+  if (code !== "other") return `/login?error=${code}`;
+  return `/login?error=other&detail=${encodeURIComponent(message.slice(0, 120))}`;
+}

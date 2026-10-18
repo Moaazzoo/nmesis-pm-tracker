@@ -21,3 +21,14 @@ describe("loginErrorCode", () => {
     expect(loginErrorCode("fetch failed")).toBe("other");
   });
 });
+
+import { loginFailurePath } from "@/lib/login-errors";
+describe("loginFailurePath", () => {
+  it("keeps known failures to a bare code", () => {
+    expect(loginFailurePath("Invalid login credentials")).toBe("/login?error=invalid");
+  });
+  it("carries the raw message for unknown failures, trimmed and URL-safe", () => {
+    expect(loginFailurePath("Database error querying schema")).toBe("/login?error=other&detail=Database%20error%20querying%20schema");
+    expect(loginFailurePath("x".repeat(300)).length).toBeLessThan(170);
+  });
+});

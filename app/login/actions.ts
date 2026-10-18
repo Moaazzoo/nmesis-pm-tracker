@@ -5,7 +5,7 @@ import { serverClient } from "@/lib/supabase/server";
 import { landingFor, effectiveRole } from "@/lib/auth-rules";
 import { getCurrentPerson } from "@/lib/auth";
 import type { Role } from "@/lib/types";
-import { loginErrorCode } from "@/lib/login-errors";
+import { loginFailurePath } from "@/lib/login-errors";
 
 export async function signIn(formData: FormData) {
   const username = String(formData.get("username") ?? "").trim().toLowerCase();
@@ -14,7 +14,7 @@ export async function signIn(formData: FormData) {
   const email = username.includes("@") ? username : `${username}@nmesis.io`;
   const supabase = await serverClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) redirect(`/login?error=${loginErrorCode(error.message)}`);
+  if (error) { console.error("sign-in failed:", error.status, error.code, error.message); redirect(loginFailurePath(error.message)); }
   let person: Awaited<ReturnType<typeof getCurrentPerson>> = null;
   try { person = await getCurrentPerson(); } catch { redirect("/no-access"); }
   redirect(landingFor(person?.role ?? "viewer"));

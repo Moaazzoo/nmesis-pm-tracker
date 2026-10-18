@@ -10,8 +10,8 @@ const MESSAGES: Record<string, string> = {
   other: "Could not sign in. The login service returned an unexpected error.",
 };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
-  const { error } = await searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string; detail?: string }> }) {
+  const { error, detail } = await searchParams;
   return (
     <main className="flex min-h-screen items-center justify-center px-4">
       <form action={signIn} className="w-full max-w-[380px] rounded-[16px] border border-line bg-[linear-gradient(180deg,var(--panel),var(--bg2))] p-7">
@@ -26,7 +26,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <span className="font-label text-[10px] text-faint">Password</span>
           <input name="password" type="password" autoComplete="current-password" required className="tk-input mt-1 w-full rounded-[10px] border border-line-strong bg-bg px-3 py-2 text-ink outline-none focus:border-green" />
         </label>
-        {error && <p className="mt-4 text-[13px] text-red" role="alert">{MESSAGES[error] ?? "Could not sign in."}</p>}
+        {error && <p className="mt-4 text-[13px] text-red" role="alert">{MESSAGES[error] ?? "Could not sign in."}{detail && <span className="mt-1 block font-mono text-[11px] text-muted">Service said: {detail}</span>}</p>}
         <button type="submit" className="mt-6 w-full rounded-full bg-green px-5 py-2.5 font-label text-[11px] font-bold text-[#0a0c0a] hover:brightness-110">Sign in</button>
         <p className="mt-4 text-[12px] text-faint">No account yet? Production creates logins; ask Moaaz Hashem or Kareem.</p>
       </form>
