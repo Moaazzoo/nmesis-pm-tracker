@@ -228,7 +228,7 @@ def import_project(pid, versions_only=False):
 
     # versions
     versions = []
-    for v in query(f'select id, task_id, version, user_id, date, status_id, comment, components.name, components.file_type from AssetVersion where project_id is "{pid}"'):
+    for v in query(f'select id, task_id, version, user_id, date, status_id, comment, asset.name, components.name, components.file_type from AssetVersion where project_id is "{pid}"'):
         if v.get("task_id") not in task_ids:
             continue
         sname = statuses.get(v["status_id"])
@@ -239,7 +239,8 @@ def import_project(pid, versions_only=False):
         comps = v.get("components") or []
         movie = [c for c in comps if (c.get("file_type") or "").lower() in (".mov", ".mp4")]
         link = (movie or comps or [{}])[0].get("name")
-        versions.append({"ftrack_id": v["id"], "task_ftrack_id": v["task_id"], "number": v["version"],
+        asset_name = (v.get("asset") or {}).get("name")
+        versions.append({"ftrack_id": v["id"], "task_ftrack_id": v["task_id"], "number": v["version"], "asset_name": asset_name,
                          "submitted_by_username": users.get(v["user_id"]), "submitted_at": _d(v.get("date")),
                          "link": link, "status": vstat, "note": (v.get("comment") or "").strip() or None})
     version_task = {v["ftrack_id"]: v["task_ftrack_id"] for v in versions}
