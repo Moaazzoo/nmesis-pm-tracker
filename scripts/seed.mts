@@ -14,6 +14,9 @@ const versionsOnly = process.argv.includes("--versions-only");
 if (!file) { console.error("usage: npx tsx scripts/seed.mts data/seed/<code>.json [--versions-only]"); process.exit(1); }
 const seed = JSON.parse(readFileSync(file, "utf8")) as SeedFile;
 
+function ok(r: { error: { message: string } | null }, what: string): void {
+  if (r.error) { console.error(`${what}: ${r.error.message}`); process.exit(1); }
+}
 function must<T>(r: { data: T | null; error: { message: string } | null }, what: string): NonNullable<T> {
   if (r.error || r.data == null) { console.error(`${what}: ${r.error?.message ?? "no data"}`); process.exit(1); }
   return r.data as NonNullable<T>;
@@ -71,11 +74,11 @@ if (!versionsOnly) {
     rows.forEach((r) => taskId.set(r.ftrack_id as string, r.id as string));
   });
   await chunked(plan.assignments, async (c) => {
-    must(await db.from("tk_assignments").upsert(c.map((a) => ({ task_id: taskId.get(a.task_ftrack_id), person_id: pid(a.person_ftrack_username) }))
+    ok(await db.from("tk_assignments").upsert(c.map((a) => ({ task_id: taskId.get(a.task_ftrack_id), person_id: pid(a.person_ftrack_username) }))
       .filter((a) => a.task_id && a.person_id), { onConflict: "task_id,person_id", ignoreDuplicates: true }), "assignments");
   });
   await chunked(plan.milestones, async (c) => {
-    must(await db.from("tk_milestones").upsert(c.map((m) => ({ project_id: projectId, ftrack_id: m.ftrack_id, name: m.name, kind: m.kind, due_date: m.due_date, done: m.done })),
+    ok(await db.from("tk_milestones").upsert(c.map((m) => ({ project_id: projectId, ftrack_id: m.ftrack_id, name: m.name, kind: m.kind, due_date: m.due_date, done: m.done })),
       { onConflict: "ftrack_id" }), "milestones");
   });
 } else {
@@ -92,7 +95,7 @@ await chunked(plan.versions, async (c) => {
 
 if (!versionsOnly) {
   await chunked(plan.status_log, async (c) => {
-    must(await db.from("tk_status_log").upsert(c.filter((s) => taskId.has(s.task_ftrack_id)).map((s) => ({ task_id: taskId.get(s.task_ftrack_id), ftrack_id: s.ftrack_id,
+    ok(await db.from("tk_status_log").upsert(c.filter((s) => taskId.has(s.task_ftrack_id)).map((s) => ({ task_id: taskId.get(s.task_ftrack_id), ftrack_id: s.ftrack_id,
       from_status_key: s.from_status_key, to_status_key: s.to_status_key, by_person_id: pid(s.by_username), at: s.at ?? new Date().toISOString() })),
       { onConflict: "ftrack_id" }), "status_log");
   });
@@ -107,7 +110,7 @@ if (!versionsOnly) {
     rows.forEach((r) => noteId.set(r.ftrack_id as string, r.id as string));
   });
   const replies = valid.filter((n) => n.reply_to_ftrack_id && noteId.has(n.reply_to_ftrack_id));
-  await chunked(replies, async (c) => { must(await db.from("tk_notes").upsert(c.map(noteRow), { onConflict: "ftrack_id" }), "note replies"); });
+  await chunked(replies, async (c) => { ok(await db.from("tk_notes").upsert(c.map(noteRow), { onConflict: "ftrack_id" }), "note replies"); });
   // task.status_since from the latest status change
   const latest = new Map<string, string>();
   for (const s of plan.status_log) if (s.at && (!latest.has(s.task_ftrack_id) || s.at > latest.get(s.task_ftrack_id)!)) latest.set(s.task_ftrack_id, s.at);
