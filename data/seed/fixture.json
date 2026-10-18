@@ -1,0 +1,34 @@
+{
+  "project": {"ftrack_id": "fx-proj", "code": "fixture", "name": "Fixture Project", "client": "Test Client", "start_date": "2026-10-01", "end_date": "2026-12-01", "color": null},
+  "nodes": [
+    {"ftrack_id": "fx-g1", "parent_ftrack_id": null, "kind": "group", "unit_kind": null, "name": "SPVs", "sort": 1, "is_deliverable": false, "content_type": null, "delivered_date": null},
+    {"ftrack_id": "fx-g2", "parent_ftrack_id": null, "kind": "group", "unit_kind": null, "name": "Backplates", "sort": 2, "is_deliverable": false, "content_type": null, "delivered_date": null},
+    {"ftrack_id": "fx-u1", "parent_ftrack_id": "fx-g1", "kind": "unit", "unit_kind": "scene", "name": "S07", "sort": 1, "is_deliverable": true, "content_type": "Reel", "delivered_date": null},
+    {"ftrack_id": "fx-u2", "parent_ftrack_id": "fx-g2", "kind": "unit", "unit_kind": "shot", "name": "Shot_01", "sort": 1, "is_deliverable": false, "content_type": null, "delivered_date": null}
+  ],
+  "tasks": [
+    {"ftrack_id": "fx-t1", "node_ftrack_id": "fx-u1", "name": "Lighting-1P", "pass_no": 1, "type": "Lighting", "status_key": "completed", "start_date": "2026-10-01", "due_date": "2026-10-05", "critical": false, "description": null, "assignees": ["ziad@nmesis.io"]},
+    {"ftrack_id": "fx-t2", "node_ftrack_id": "fx-u1", "name": "Lighting-2P", "pass_no": 2, "type": "Lighting", "status_key": "waiting", "start_date": null, "due_date": "2026-10-20", "critical": false, "description": null, "assignees": ["ziad@nmesis.io"]},
+    {"ftrack_id": "fx-t3", "node_ftrack_id": "fx-u1", "name": "Comp-1P", "pass_no": 1, "type": "Compositing", "status_key": "pending_review", "start_date": "2026-10-06", "due_date": "2026-10-15", "critical": true, "description": null, "assignees": ["M.elturkman@nmesis.io"]},
+    {"ftrack_id": "fx-t4", "node_ftrack_id": "fx-u2", "name": "Comp-2P", "pass_no": 2, "type": "Compositing", "status_key": "comments", "start_date": null, "due_date": null, "critical": false, "description": null, "assignees": ["M.elturkman@nmesis.io"]}
+  ],
+  "status_log": [
+    {"ftrack_id": "fx-s1", "task_ftrack_id": "fx-t1", "from_status_key": "in_progress", "to_status_key": "pending_review", "by_username": "ziad@nmesis.io", "at": "2026-10-04T10:00:00"},
+    {"ftrack_id": "fx-s2", "task_ftrack_id": "fx-t1", "from_status_key": "pending_review", "to_status_key": "completed", "by_username": "Kareem@nmesis.io", "at": "2026-10-05T09:00:00"}
+  ],
+  "notes": [
+    {"ftrack_id": "fx-n1", "task_ftrack_id": "fx-t3", "version_ftrack_id": null, "author_username": "moaaz.hashem@nmesis.io", "category": "Task Definition", "source_label": "Task Definition", "body": "Comp the S07 reel over the approved lighting.", "reply_to_ftrack_id": null, "at": "2026-10-06T09:00:00"},
+    {"ftrack_id": "fx-n2", "task_ftrack_id": "fx-t3", "version_ftrack_id": "fx-v2", "author_username": "M.elturkman@nmesis.io", "category": "Artist Note", "source_label": "Artist Note", "body": "v2 up with the colour fix.", "reply_to_ftrack_id": null, "at": "2026-10-14T18:00:00"},
+    {"ftrack_id": "fx-n3", "task_ftrack_id": "fx-t4", "version_ftrack_id": null, "author_username": "Kareem@nmesis.io", "category": "Supervisor Feedback", "source_label": "CG Sup Feedback", "body": "Edges too soft on the hood — tighten the matte.", "reply_to_ftrack_id": null, "at": "2026-10-15T12:00:00"}
+  ],
+  "versions": [
+    {"ftrack_id": "fx-v1", "task_ftrack_id": "fx-t3", "number": 1, "submitted_by_username": "M.elturkman@nmesis.io", "submitted_at": "2026-10-10T17:00:00", "link": "S07_comp_v001.mov", "status": "needs_changes", "note": "first pass"},
+    {"ftrack_id": "fx-v2", "task_ftrack_id": "fx-t3", "number": 2, "submitted_by_username": "M.elturkman@nmesis.io", "submitted_at": "2026-10-14T18:00:00", "link": "S07_comp_v002.mov", "status": "submitted", "note": "colour fix"}
+  ],
+  "milestones": [
+    {"ftrack_id": "fx-m1", "name": "Client Review: S07 reel", "kind": "client_review", "due_date": "2026-10-22", "done": false},
+    {"ftrack_id": "fx-m2", "name": "Delivery: S07 reel", "kind": "delivery", "due_date": "2026-10-29", "done": false}
+  ],
+  "unmapped": {"statuses": {}, "types": {}, "labels": {}, "object_types": {}},
+  "report": {"skipped_notes_on_non_tasks": 0, "orphan_tasks": 0}
+}
