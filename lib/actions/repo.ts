@@ -2,10 +2,11 @@ import "server-only";
 import { adminClient } from "@/lib/supabase/admin";
 import type { FieldRepo, TaskRepo } from "./tasks-core";
 import type { DrawerRepo } from "./drawer-core";
+import type { ReviewRepo } from "./review-core";
 import type { Discipline } from "@/lib/types";
 
 /** Supabase-backed repository used by every server action. Service role; permissions are checked in the cores. */
-export function supabaseRepo(): TaskRepo & FieldRepo & DrawerRepo {
+export function supabaseRepo(): TaskRepo & FieldRepo & DrawerRepo & ReviewRepo {
   const db = adminClient();
   return {
     async getTask(id) {
@@ -25,6 +26,12 @@ export function supabaseRepo(): TaskRepo & FieldRepo & DrawerRepo {
       const { data, error } = await db.from("tk_notes").insert({ task_id: n.taskId, version_id: n.versionId ?? null, author_id: n.authorId, category: n.category, body: n.body, reply_to_id: n.replyTo ?? null }).select("id").single();
       if (error) throw new Error(error.message);
       return (data as { id: string }).id;
+    },
+    async siblingTasks(taskId) {
+      const { data: t } = await db.from("tk_tasks").select("node_id").eq("id", taskId).maybeSingle();
+      if (!t) return [];
+      const { data } = await db.from("tk_tasks").select("id, name, type_id, node_id, status_key").eq("node_id", t.node_id).eq("archived", false);
+      return (data ?? []) as { id: string; name: string; type_id: string | null; node_id: string; status_key: string }[];
     },
     async maxVersionNumber(taskId) {
       const { data } = await db.from("tk_versions").select("number").eq("task_id", taskId).order("number", { ascending: false }).limit(1);
