@@ -16,8 +16,10 @@ export async function stateByStatusKey(): Promise<Record<string, State>> {
 
 export async function listProjectsWithSummary(now = new Date()): Promise<ProjectCardData[]> {
   const db = adminClient();
-  const projects = must(await db.from("tk_projects").select("id, code, name, client, start_date, end_date").eq("status", "active").order("name"), "projects");
-  const states = await stateByStatusKey();
+  const [projects, states] = await Promise.all([
+    db.from("tk_projects").select("id, code, name, client, start_date, end_date").eq("status", "active").order("name").then((r) => must(r, "projects")),
+    stateByStatusKey(),
+  ]);
   // One read per project keeps each result far below PostgREST's 1000-row page, so counts cannot truncate silently as projects are added.
   return Promise.all(projects.map(async (p) => {
     const [tasks, milestones] = await Promise.all([

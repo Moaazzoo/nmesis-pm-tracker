@@ -85,3 +85,7 @@ body {
 .risk-pulse { animation: tk-pulse 2.2s ease-in-out infinite; }
 @keyframes tk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
 @media (prefers-reduced-motion: reduce) { .risk-pulse { animation: none; } }
+
+/* Loading skeleton pulse (page-local prefix tk-skel-) */
+@keyframes tk-skel-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+.tk-skel-title, .tk-skel-row { animation: tk-skel-pulse 1.4s ease-in-out infinite; }
