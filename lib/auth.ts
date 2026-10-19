@@ -12,8 +12,11 @@ export type CurrentPerson = Person & { username: string; lens: Role | null; own_
 /** The logged-in person, or null when there is no session. Throws `NO_ACCESS` (caught by requirePerson) when the login has no active profile. */
 export const getCurrentPerson = cache(async (): Promise<CurrentPerson | null> => {
   const supabase = await serverClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  // getClaims verifies the session token locally against Supabase's published signing key (no auth round trip per request).
+  const { data: claims } = await supabase.auth.getClaims();
+  const userId = claims?.claims?.sub;
+  if (!userId) return null;
+  const user = { id: userId };
   const db = adminClient();
   const [{ data: profile }, { data: person }, store] = await Promise.all([
     db.from("profiles").select("id, username, full_name, active").eq("id", user.id).maybeSingle(),

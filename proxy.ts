@@ -20,7 +20,9 @@ export async function proxy(request: NextRequest) {
       },
     },
   });
-  const { data: { user } } = await supabase.auth.getUser();
+  // Local token verification (published signing key) instead of an auth-server round trip on every request.
+  const { data: claims } = await supabase.auth.getClaims();
+  const user = claims?.claims?.sub ? { id: claims.claims.sub } : null;
   const { pathname } = request.nextUrl;
   if (user && pathname === "/no-access") return response;
   if (!user && pathname !== "/login") {
